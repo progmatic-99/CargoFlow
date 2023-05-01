@@ -7,3 +7,6 @@
 ### Prototype Partner: Shubham 
 
 ### Prototype Development Completed: 
+
+
+### Run `python manage.py populate_demo_data` to populate demo data

@@ -50,7 +50,6 @@ class Container(models.Model):
 class Cargo(models.Model):
     description = models.CharField(max_length=200)
     weight = models.FloatField()
-    color = models.CharField(max_length=50, null=True, blank=True)
     container = models.ForeignKey(Container, on_delete=models.CASCADE, null=True, blank=True)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
@@ -62,12 +61,11 @@ class looseCargo(models.Model):
     description = models.CharField(max_length=200)
     weight = models.FloatField()
     color = models.CharField(max_length=50, blank=True, null=True)
-    #container = models.ForeignKey(Container, on_delete=models.CASCADE, null=True, blank=True)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.description} ({self.container.container_number})"
+        return f"{self.description} ({self.color})"
 
 
 class PortHandling(models.Model):
@@ -97,8 +95,47 @@ class BillOfLading(models.Model):
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE, blank=True, null=True)
+    loose_cargo = models.ForeignKey(looseCargo, on_delete=models.CASCADE, blank=True, null=True)
     issued_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.bill_of_lading_number} - {self.voyage.vessel.name} ({self.voyage.voyage_number})"
+        return f"{self.bill_of_lading_number} - ({self.voyage.voyage_number})"
+
+
+class Manifest(models.Model):
+    voyage = models.OneToOneField(Voyage, on_delete=models.CASCADE, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Manifest for {self.voyage.vessel.name} ({self.voyage.voyage_number})"
+
+    def get_bill_of_lading_records(self):
+        return BillOfLading.objects.filter(voyage=self.voyage)
+
+
+class ServiceType(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    price_per_tonnage = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.name
+
+class ServiceManager(models.Manager):
+    def services_for_vessel(self, vessel):
+        return self.filter(vessel=vessel)
+
+class Service(models.Model):
+    vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
+    service_type = models.ManyToManyField(ServiceType)
+    service_date = models.DateField()
+    description = models.TextField(blank=True, null=True)
+
+    objects = ServiceManager()
+
+    class Meta:
+        verbose_name_plural = "Services"
+
+    def __str__(self):
+        return f"{self.service_type.name} for {self.vessel.name}"
