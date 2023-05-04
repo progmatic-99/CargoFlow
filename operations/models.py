@@ -139,3 +139,19 @@ class Service(models.Model):
 
     def __str__(self):
         return f"{self.service_type.name} for {self.vessel.name}"
+    
+
+
+class DeliveryOrder(models.Model):
+    consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
+    voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Delivery Orders"
+
+    def __str__(self):
+        return f"Delivery Order for {self.consignee} - {self.voyage}"
+
+    def get_bill_of_lading_records(self):
+        return BillOfLading.objects.filter(consignee=self.consignee, voyage=self.voyage)
