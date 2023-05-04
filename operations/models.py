@@ -2,6 +2,8 @@ from django.db import models
 
 # Create your models here.
 from django.db import models
+from django.utils import timezone
+
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
@@ -11,6 +13,7 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Shipper(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -42,7 +45,7 @@ class Container(models.Model):
     container_number = models.CharField(max_length=20)
     container_type = models.CharField(max_length=10)
     tare_weight = models.FloatField()
-    on_port = models.BooleanField(default=False)
+    on_port = models.BooleanField(default=False)  # Change this line
 
     def __str__(self):
         return self.container_number
@@ -57,6 +60,34 @@ class Cargo(models.Model):
     def __str__(self):
         return f"{self.description} ({self.container.container_number})"
 
+
+
+class ContainerStatus(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class PortHandling(models.Model):
+    vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    arrival_date = models.DateTimeField()
+    departure_date = models.DateTimeField()
+    port = models.CharField(max_length=200)
+    status = models.ForeignKey(ContainerStatus, on_delete=models.CASCADE, null=True)
+    status_start_time = models.DateTimeField(default=timezone.now)
+    status_end_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.vessel.name} - {self.port} ({self.arrival_date.strftime('%Y-%m-%d')} - {self.departure_date.strftime('%Y-%m-%d')})"
+
+    def status_duration(self):
+        if self.status_end_time:
+            return self.status_end_time - self.status_start_time
+        else:
+            return timezone.now() - self.status_start_time
+
 class looseCargo(models.Model):
     description = models.CharField(max_length=200)
     weight = models.FloatField()
@@ -66,17 +97,6 @@ class looseCargo(models.Model):
 
     def __str__(self):
         return f"{self.description} ({self.color})"
-
-
-class PortHandling(models.Model):
-    vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    arrival_date = models.DateTimeField()
-    departure_date = models.DateTimeField()
-    port = models.CharField(max_length=200)
-
-    def __str__(self):
-        return f"{self.vessel.name} - {self.port} ({self.arrival_date.strftime('%Y-%m-%d')} - {self.departure_date.strftime('%Y-%m-%d')})"
 
 
 class Voyage(models.Model):
@@ -143,6 +163,8 @@ class Service(models.Model):
 
 
 class DeliveryOrder(models.Model):
+    order_number = models.CharField(max_length=50)
+    issued_date = models.DateTimeField()
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

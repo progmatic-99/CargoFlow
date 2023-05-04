@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Company, Shipper, Consignee, Vessel, Container, Cargo, PortHandling, Voyage, BillOfLading, Manifest, looseCargo, Service, ServiceType, DeliveryOrder
+from .models import Company, Shipper, Consignee, Vessel, Container, Cargo, PortHandling, Voyage, BillOfLading, Manifest, looseCargo, Service, ServiceType, DeliveryOrder, PortHandling, ContainerStatus
+from django.utils.timesince import timesince
 
 admin.site.register(Company)
 admin.site.register(Shipper)
@@ -9,10 +10,10 @@ admin.site.register(Consignee)
 admin.site.register(Vessel)
 admin.site.register(Container)
 admin.site.register(Cargo)
-admin.site.register(PortHandling)
 admin.site.register(Voyage)
 admin.site.register(BillOfLading)
 admin.site.register(looseCargo)
+admin.site.register(ContainerStatus)
 
 class DeliveryOrderAdmin(admin.ModelAdmin):
     readonly_fields = ('get_bill_of_lading_records',)
@@ -53,6 +54,15 @@ admin.site.register(Manifest, ManifestAdmin)
 admin.site.register(ServiceType)
 admin.site.register(Service)
 
+class PortHandlingAdmin(admin.ModelAdmin):
+    readonly_fields = ('status_duration',)
 
+    def status_duration(self, obj):
+        duration = obj.status_duration()
+        return timesince(obj.status_start_time, duration)
+
+    status_duration.short_description = 'Status Duration'
+
+admin.site.register(PortHandling, PortHandlingAdmin)
 
 
