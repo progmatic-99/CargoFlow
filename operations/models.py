@@ -78,8 +78,6 @@ class looseCargo(models.Model):
     description = models.CharField(max_length=200)
     weight = models.FloatField()
     color = models.CharField(max_length=50, blank=True, null=True)
-    shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
-    consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.description} ({self.color})"
