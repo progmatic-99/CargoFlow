@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.utils import timezone
+from users import models as usermodels
 
 
 class Company(models.Model):
@@ -20,9 +21,12 @@ class Shipper(models.Model):
     contact_person = models.CharField(max_length=200)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
+        
 
     def __str__(self):
         return f"{self.contact_person} ({self.company.name})"
+    
+
 
 class Consignee(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -69,24 +73,6 @@ class ContainerStatus(models.Model):
         return self.name
 
 
-class PortHandling(models.Model):
-    vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    arrival_date = models.DateTimeField()
-    departure_date = models.DateTimeField()
-    port = models.CharField(max_length=200)
-    status = models.ForeignKey(ContainerStatus, on_delete=models.CASCADE, null=True)
-    status_start_time = models.DateTimeField(default=timezone.now)
-    status_end_time = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.vessel.name} - {self.port} ({self.arrival_date.strftime('%Y-%m-%d')} - {self.departure_date.strftime('%Y-%m-%d')})"
-
-    def status_duration(self):
-        if self.status_end_time:
-            return self.status_end_time - self.status_start_time
-        else:
-            return timezone.now() - self.status_start_time
 
 class looseCargo(models.Model):
     description = models.CharField(max_length=200)
@@ -108,7 +94,23 @@ class Voyage(models.Model):
     arrival_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.vessel.name} ({self.voyage_number}) - {self.from_port} -> {self.to_port}"
+        return f"({self.voyage_number}) - {self.from_port} -> {self.to_port}"
+
+class PortHandling(models.Model):
+    voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
+    Container = models.ForeignKey(Container, on_delete=models.CASCADE)
+    status = models.ForeignKey(ContainerStatus, on_delete=models.CASCADE, null=True)
+    status_start_time = models.DateTimeField(default=timezone.now)
+    status_end_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.voyage.vessel.name} - ({self.status_start_time} - {self.status_end_time})"
+
+    def status_duration(self):
+        if self.status_end_time:
+            return self.status_end_time - self.status_start_time
+        else:
+            return timezone.now() - self.status_start_time
 
 class BillOfLading(models.Model):
     bill_of_lading_number = models.CharField(max_length=50)
@@ -176,4 +178,4 @@ class DeliveryOrder(models.Model):
         return f"Delivery Order for {self.consignee} - {self.voyage}"
 
     def get_bill_of_lading_records(self):
-        return BillOfLading.objects.filter(consignee=self.consignee, voyage=self.voyage)
+        return BillOfLading.objects.select_related('cargo', 'loose_cargo', 'shipper', 'consignee', 'voyage').filter(consignee=self.consignee, voyage=self.voyage)

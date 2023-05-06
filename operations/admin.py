@@ -3,6 +3,9 @@ from django.urls import reverse
 from django.utils.html import format_html
 from .models import Company, Shipper, Consignee, Vessel, Container, Cargo, PortHandling, Voyage, BillOfLading, Manifest, looseCargo, Service, ServiceType, DeliveryOrder, PortHandling, ContainerStatus
 from django.utils.timesince import timesince
+from datetime import timedelta
+
+
 
 admin.site.register(Company)
 admin.site.register(Shipper)
@@ -11,12 +14,24 @@ admin.site.register(Vessel)
 admin.site.register(Container)
 admin.site.register(Cargo)
 admin.site.register(Voyage)
-admin.site.register(BillOfLading)
-admin.site.register(looseCargo)
 admin.site.register(ContainerStatus)
 
+class BillOfLadingAdmin(admin.ModelAdmin):
+    list_display = ('bill_of_lading_number','voyage','consignee', 'shipper')
+    list_filter = ('voyage',)
+    search_fields = ('voyage__voyage_number', 'bill_of_lading_number', 'consignee__contact_person', 'shipper__contact_person')
+
+admin.site.register(BillOfLading, BillOfLadingAdmin)
+class looseCargoAdmin(admin.ModelAdmin):
+    list_display = ('description', 'weight', 'color')
+    list_filter = ('color',)
+
+admin.site.register(looseCargo, looseCargoAdmin)
 class DeliveryOrderAdmin(admin.ModelAdmin):
+    list_display = ('consignee', 'voyage',  'created_at')
     readonly_fields = ('get_bill_of_lading_records',)
+    list_filter = ('consignee', 'voyage')
+    search_fields = ('voyage__voyage_number',)
 
     def get_bill_of_lading_records(self, obj):
         bill_of_lading_records = BillOfLading.objects.filter(consignee=obj.consignee, voyage=obj.voyage)
@@ -34,6 +49,7 @@ class DeliveryOrderAdmin(admin.ModelAdmin):
 admin.site.register(DeliveryOrder, DeliveryOrderAdmin)
 
 class ManifestAdmin(admin.ModelAdmin):
+    list_display = ('voyage', 'created_at')
     readonly_fields = ('get_bill_of_lading_records',)
 
     def get_bill_of_lading_records(self, obj):
@@ -55,13 +71,15 @@ admin.site.register(ServiceType)
 admin.site.register(Service)
 
 class PortHandlingAdmin(admin.ModelAdmin):
+    list_display = ('Container', 'status', 'status_start_time', 'status_end_time', 'status_duration_str')
     readonly_fields = ('status_duration',)
 
-    def status_duration(self, obj):
+    def status_duration_str(self, obj):
         duration = obj.status_duration()
-        return timesince(obj.status_start_time, duration)
+        duration_str = str(duration - timedelta(microseconds=duration.microseconds))
+        return duration_str
 
-    status_duration.short_description = 'Status Duration'
+    status_duration_str.short_description = 'Duration'
 
 admin.site.register(PortHandling, PortHandlingAdmin)
 

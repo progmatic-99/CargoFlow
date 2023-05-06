@@ -22,5 +22,5 @@ admin.site.index_title  =  "Prototyping Tools"
 
 urlpatterns = [
     #path('', include('operations.urls')),
-    path('admin/', admin.site.urls),
+    path('', admin.site.urls),
 ]

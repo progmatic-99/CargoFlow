@@ -1,10 +1,17 @@
 from django.core.management.base import BaseCommand
 from operations.models import (
     Company, Shipper, Consignee, Vessel, Container, Cargo, PortHandling, Voyage,
-    BillOfLading, Manifest, ServiceType, Service, looseCargo
+    BillOfLading, Manifest, ServiceType, Service, looseCargo, DeliveryOrder, ContainerStatus
 )
 import random
 from faker import Faker
+import warnings
+
+from datetime import datetime, timedelta
+import pytz
+import random
+
+warnings.filterwarnings('ignore')
 
 fake = Faker()
 
@@ -128,5 +135,41 @@ class Command(BaseCommand):
                 service.service_type.set(ServiceType.objects.order_by('?')[:random.randint(1, 3)])
                 service.save()
 
+        # Create Deliver Orders
+
+        for voyage in Voyage.objects.all():
+            for _ in range(3):
+                order_number = f"DO-{fake.unique.random_number(digits=6)}"
+                issued_date = fake.date_between(start_date='-1y', end_date='today')
+                DeliveryOrder.objects.create(
+                    order_number=order_number,
+                    issued_date=issued_date,
+                    consignee=random.choice(Consignee.objects.all()),
+                    voyage=voyage
+                )
+
+            container_statuses = ['stuffing', 'destuffing', 'on-board', 'vacant']
+            for status in container_statuses:
+                ContainerStatus.objects.create(name=status)
+
+
+            container_statuses = ContainerStatus.objects.all()
+
+            for voyage in Voyage.objects.all():
+                for container in Container.objects.filter(on_port=True):
+                    status = random.choice(container_statuses) if random.randint(1, 5) == 1 else None
+                    status_start_time = fake.date_time_between(start_date='-1y', end_date='now', tzinfo=pytz.UTC)
+
+                    status_end_time = fake.date_time_between(start_date=status_start_time, end_date='now', tzinfo=pytz.UTC) if status else None
+
+                    PortHandling.objects.create(
+                        voyage=voyage,
+                        Container=container,
+                        status=status,
+                        status_start_time=status_start_time,
+                        status_end_time=status_end_time
+                    )
+
+            
         self.stdout.write(self.style.SUCCESS("Demo data created successfully!"))
 
