@@ -4,16 +4,20 @@ from django.utils.html import format_html
 from .models import Company, Shipper, Consignee, Vessel, Container, Cargo, PortHandling, Voyage, BillOfLading, Manifest, looseCargo, Service, ServiceType, DeliveryOrder, PortHandling, ContainerStatus
 from django.utils.timesince import timesince
 from datetime import timedelta
+from operations.admin_site import CustomAdminSite
+
+admin_site = CustomAdminSite(name='myadmin')
 
 
-admin.site.register(Company)
-admin.site.register(Shipper)
-admin.site.register(Consignee)
-admin.site.register(Vessel)
-admin.site.register(Container)
-admin.site.register(Cargo)
-admin.site.register(Voyage)
-admin.site.register(ContainerStatus)
+
+admin_site.register(Company)
+admin_site.register(Shipper)
+admin_site.register(Consignee)
+admin_site.register(Vessel)
+admin_site.register(Container)
+admin_site.register(Cargo)
+admin_site.register(Voyage)
+admin_site.register(ContainerStatus)
 
 
 class BillOfLadingAdmin(admin.ModelAdmin):
@@ -21,12 +25,12 @@ class BillOfLadingAdmin(admin.ModelAdmin):
     list_filter = ('voyage',)
     search_fields = ('voyage__voyage_number', 'bill_of_lading_number', 'consignee__contact_person', 'shipper__contact_person','cargo__description','loose_cargo__description', 'loose_cargo__color')
 
-admin.site.register(BillOfLading, BillOfLadingAdmin)
+admin_site.register(BillOfLading, BillOfLadingAdmin)
 class looseCargoAdmin(admin.ModelAdmin):
     list_display = ('description', 'weight', 'color')
     list_filter = ('color',)
 
-admin.site.register(looseCargo, looseCargoAdmin)
+admin_site.register(looseCargo, looseCargoAdmin)
 class DeliveryOrderAdmin(admin.ModelAdmin):
     list_display = ('consignee', 'voyage',  'created_at')
     readonly_fields = ('get_bill_of_lading_records',)
@@ -46,7 +50,7 @@ class DeliveryOrderAdmin(admin.ModelAdmin):
 
     get_bill_of_lading_records.short_description = 'Bill of Lading Records'
 
-admin.site.register(DeliveryOrder, DeliveryOrderAdmin)
+admin_site.register(DeliveryOrder, DeliveryOrderAdmin)
 
 class ManifestAdmin(admin.ModelAdmin):
     list_display = ('voyage', 'created_at')
@@ -66,9 +70,9 @@ class ManifestAdmin(admin.ModelAdmin):
     get_bill_of_lading_records.short_description = 'Bill of Lading Records'
 
 
-admin.site.register(Manifest, ManifestAdmin)
-admin.site.register(ServiceType)
-admin.site.register(Service)
+admin_site.register(Manifest, ManifestAdmin)
+admin_site.register(ServiceType)
+admin_site.register(Service)
 
 class PortHandlingAdmin(admin.ModelAdmin):
     list_display = ('Container', 'status', 'status_start_time', 'status_end_time', 'status_duration_str')
@@ -82,6 +86,6 @@ class PortHandlingAdmin(admin.ModelAdmin):
 
     status_duration_str.short_description = 'Duration'
 
-admin.site.register(PortHandling, PortHandlingAdmin)
+admin_site.register(PortHandling, PortHandlingAdmin)
 
 

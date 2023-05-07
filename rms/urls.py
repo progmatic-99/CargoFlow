@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from operations.admin import admin_site
 
 admin.site.site_header  =  "RMS Master Console"  
 admin.site.site_title  =  "Shipping Management System"
 admin.site.index_title  =  "Prototyping Tools"
 
 urlpatterns = [
-    #path('', include('operations.urls')),
-    path('', admin.site.urls),
+    
+    path('', admin_site.urls),
 ]
