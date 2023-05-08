@@ -15,7 +15,7 @@ class CustomAdminSite(AdminSite):
         # Check if the user is active and is a staff member.
         return request.user.is_active and request.user.is_staff
 
-    def get_app_list(self, request):
+    def get_app_list(self, request,app_label=None):
         app_list = super().get_app_list(request)
 
         section1_models = [ 'Vessel', 'Voyage', 'Service', 'ServiceType',]

@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-n@z8k@ca0j4r(6n5*kt7xdungs7h*^_)zsb61fcg#nxl5ixcjl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','.ngrok-free.app']
+
+ngrok_url = 'https://1f7f-2405-201-4011-896b-fdc7-a9ae-fdd7-6b07.ngrok-free.app'
+
 
 AUTH_USER_MODEL = 'users.User'
 # Application definition
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #corsheaders
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -124,3 +128,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CSRF_TRUSTED_ORIGINS = [f'{ngrok_url}']
