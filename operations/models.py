@@ -1,9 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from django.db import models
 from django.utils import timezone
-from users import models as usermodels
 
 
 class Company(models.Model):
@@ -21,11 +19,9 @@ class Shipper(models.Model):
     contact_person = models.CharField(max_length=200)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-        
 
     def __str__(self):
         return f"{self.contact_person} ({self.company.name})"
-    
 
 
 class Consignee(models.Model):
@@ -37,6 +33,7 @@ class Consignee(models.Model):
     def __str__(self):
         return f"{self.contact_person} ({self.company.name})"
 
+
 class Vessel(models.Model):
     name = models.CharField(max_length=200)
     imo_number = models.CharField(max_length=15)
@@ -44,6 +41,7 @@ class Vessel(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Container(models.Model):
     container_number = models.CharField(max_length=20)
@@ -54,10 +52,13 @@ class Container(models.Model):
     def __str__(self):
         return self.container_number
 
+
 class Cargo(models.Model):
     description = models.CharField(max_length=200)
     weight = models.FloatField()
-    container = models.ForeignKey(Container, on_delete=models.CASCADE, null=True, blank=True)
+    container = models.ForeignKey(
+        Container, on_delete=models.CASCADE, null=True, blank=True
+    )
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
 
@@ -65,13 +66,11 @@ class Cargo(models.Model):
         return f"{self.description} ({self.container.container_number})"
 
 
-
 class ContainerStatus(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
-
 
 
 class looseCargo(models.Model):
@@ -94,6 +93,7 @@ class Voyage(models.Model):
     def __str__(self):
         return f"({self.voyage_number}) - {self.from_port} -> {self.to_port}"
 
+
 class PortHandling(models.Model):
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     Container = models.ForeignKey(Container, on_delete=models.CASCADE)
@@ -110,13 +110,16 @@ class PortHandling(models.Model):
         else:
             return timezone.now() - self.status_start_time
 
+
 class BillOfLading(models.Model):
     bill_of_lading_number = models.CharField(max_length=50)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE, blank=True, null=True)
-    loose_cargo = models.ForeignKey(looseCargo, on_delete=models.CASCADE, blank=True, null=True)
+    loose_cargo = models.ForeignKey(
+        looseCargo, on_delete=models.CASCADE, blank=True, null=True
+    )
     issued_date = models.DateTimeField()
 
     def __str__(self):
@@ -142,9 +145,11 @@ class ServiceType(models.Model):
     def __str__(self):
         return self.name
 
+
 class ServiceManager(models.Manager):
     def services_for_vessel(self, vessel):
         return self.filter(vessel=vessel)
+
 
 class Service(models.Model):
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
@@ -159,7 +164,6 @@ class Service(models.Model):
 
     def __str__(self):
         return f"{self.service_type.name} for {self.vessel.name}"
-    
 
 
 class DeliveryOrder(models.Model):
@@ -176,4 +180,6 @@ class DeliveryOrder(models.Model):
         return f"Delivery Order for {self.consignee} - {self.voyage}"
 
     def get_bill_of_lading_records(self):
-        return BillOfLading.objects.select_related('cargo', 'loose_cargo', 'shipper', 'consignee', 'voyage').filter(consignee=self.consignee, voyage=self.voyage)
+        return BillOfLading.objects.select_related(
+            "cargo", "loose_cargo", "shipper", "consignee", "voyage"
+        ).filter(consignee=self.consignee, voyage=self.voyage)

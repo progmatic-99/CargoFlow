@@ -5,6 +5,7 @@ db.sqlite3
 */migrations
 **/migrations/
 venv
+.venv
 profile_pics/
 gobasic/migrations
 pagekite.py 
