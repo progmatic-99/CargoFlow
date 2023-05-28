@@ -45,8 +45,8 @@ class Vessel(models.Model):
 
 class Container(models.Model):
     container_number = models.CharField(max_length=20)
-    container_type = models.CharField(max_length=10)
-    tare_weight = models.FloatField()
+    container_type = models.CharField(max_length=20)
+    tare_weight = models.CharField(max_length=20)
     on_port = models.BooleanField(default=False)  # Change this line
 
     def __str__(self):
@@ -55,7 +55,7 @@ class Container(models.Model):
 
 class Cargo(models.Model):
     description = models.CharField(max_length=200)
-    weight = models.FloatField()
+    weight = models.CharField(max_length=20)
     container = models.ForeignKey(
         Container, on_delete=models.CASCADE, null=True, blank=True
     )
@@ -75,7 +75,7 @@ class ContainerStatus(models.Model):
 
 class looseCargo(models.Model):
     description = models.CharField(max_length=200)
-    weight = models.FloatField()
+    weight = models.CharField(max_length=20)
     color = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -112,7 +112,7 @@ class PortHandling(models.Model):
 
 
 class BillOfLading(models.Model):
-    bill_of_lading_number = models.CharField(max_length=50)
+    bill_of_lading_number = models.IntegerField()
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
     consignee = models.ForeignKey(Consignee, on_delete=models.CASCADE)
