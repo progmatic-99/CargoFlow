@@ -6,12 +6,12 @@ EMPLOYEE = 5
 MANAGER = 6
 OWNER = 7
 
-USER_TYPE_CHOICES = (   
-    (SUPERUSER, 'Superuser'),
-    (STAFF, 'Staff'),
-    (CUSTOMER, 'Customer'),
-    (INTERN, 'Intern'),
-    (EMPLOYEE, 'Employee'),
-    (MANAGER, 'Manager'),
-    (OWNER, 'Owner'),
+USER_TYPE_CHOICES = (
+    (SUPERUSER, "Superuser"),
+    (STAFF, "Staff"),
+    (CUSTOMER, "Customer"),
+    (INTERN, "Intern"),
+    (EMPLOYEE, "Employee"),
+    (MANAGER, "Manager"),
+    (OWNER, "Owner"),
 )

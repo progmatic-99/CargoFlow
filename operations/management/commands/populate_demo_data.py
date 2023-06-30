@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.db.utils import IntegrityError
 from operations.models import (
     Company,
     Shipper,
@@ -123,11 +124,14 @@ class Command(BaseCommand):
                     )
 
         # Create manifests
-        for voyage in Voyage.objects.all():
-            Manifest.objects.create(
-                voyage=voyage,
-                created_at=fake.date_between(start_date="-1y", end_date="today"),
-            )
+        try:
+            for voyage in Voyage.objects.all():
+                Manifest.objects.create(
+                    voyage=voyage,
+                    created_at=fake.date_between(start_date="-1y", end_date="today"),
+                )
+        except IntegrityError:
+            pass
 
         # Create service types
         for _ in range(5):
@@ -137,6 +141,8 @@ class Command(BaseCommand):
                 price_per_tonnage=random.uniform(50, 500),
             )
 
+        total_service_types = ServiceType.objects.count()
+        all_service_types = ServiceType.objects.all()
         # Create services
         for vessel in Vessel.objects.all():
             for _ in range(3):
@@ -145,13 +151,13 @@ class Command(BaseCommand):
                     service_date=fake.date_between(start_date="-1y", end_date="today"),
                     description=fake.sentence(),
                 )
-                service.service_type.set(
-                    ServiceType.objects.order_by("?")[: random.randint(1, 3)]
-                )
+                service_type = all_service_types[
+                    random.randint(0, total_service_types - 1)
+                ]
+                service.service_type.add(service_type)
                 service.save()
 
         # Create Deliver Orders
-
         for voyage in Voyage.objects.all():
             for _ in range(3):
                 order_number = f"DO-{fake.unique.random_number(digits=6)}"
