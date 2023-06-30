@@ -32,6 +32,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 def loginPage(request):
     page = "login"
+    error = ""
 
     if request.user.is_authenticated:
         return redirect("index")
