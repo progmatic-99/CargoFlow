@@ -53,6 +53,9 @@
                         </b>
                       </h1>
                     </div>
+                    {% if error %}
+                      <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endif %}
                     <form class="user" action="" method="POST">
                       {% csrf_token %}
                       <div class="form-group">

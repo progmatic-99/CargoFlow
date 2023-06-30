@@ -43,7 +43,7 @@ def loginPage(request):
         try:
             user = User.objects.get(username=username)
         except:
-            print(request, "oops")
+            error= "User dont exist! Please Try Again"
 
         user = authenticate(request, username=username, password=password)
 
@@ -52,9 +52,9 @@ def loginPage(request):
             # email = user.email
             return redirect("index")
         else:
-            print("Some detail is incorrect, retry!")
+            error= "Credentials dont match. Please Try Again"
 
-    loginPage_data = {"page": page}
+    loginPage_data = {"page": page,'error':error}
     return render(request, "operations/login.html", loginPage_data)
 
 
