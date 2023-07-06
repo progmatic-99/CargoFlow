@@ -13,7 +13,7 @@
     />
 
     <link
-      href="{% static 'gobasic/vendor/fontawesome-free/css/all.min.css' %}"
+      href="{% static 'operations/vendor/fontawesome-free/css/all.min.css' %}"
       rel="stylesheet"
       type="text/css"
     />
@@ -92,6 +92,9 @@
               <a class="collapse-item" href="{% url 'vessel-create' %}"
                 >Vessel</a
               >
+              <a class="collapse-item" href="{% url 'foreign-vessel-create' %}"
+                >Foreign Vessel</a
+              >
               <a class="collapse-item" href="{% url 'voyage-create' %}"
                 >Voyage</a
               >
@@ -133,6 +136,7 @@
               <a class="collapse-item" href="{% url 'service-list' %}">Service</a>
               <a class="collapse-item" href="{% url 'service-type-list' %}">Service Type</a>
               <a class="collapse-item" href="{% url 'vessel-list' %}">Vessel</a>
+              <a class="collapse-item" href="{% url 'foreign-vessel-list' %}">Foreign Vessel</a>
               <a class="collapse-item" href="{% url 'voyage-list' %}">Voyage</a>
               <a class="collapse-item" href="{% url 'consignee-list' %}">Consignee</a>
               <a class="collapse-item" href="{% url 'company-list' %}">Company</a>

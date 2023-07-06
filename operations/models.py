@@ -53,12 +53,28 @@ class Vessel(models.Model):
     name = models.CharField(max_length=200)
     imo_number = models.CharField(max_length=15)
     flag = models.CharField(max_length=50)
+    on_port = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse("vessel-list")
+
+
+class ForeignVessel(Vessel):
+    purpose_of_call = models.CharField(max_length=500)
+    import_no = models.CharField(max_length=15)
+    export_no = models.CharField(max_length=15)
+    cha_boe = models.TextField(null=True, blank=True)
+    agent_importer = models.CharField(max_length=200)
+    remarks = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("foreign-vessel-list")
 
 
 class Container(models.Model):
@@ -196,6 +212,7 @@ class Service(models.Model):
     service_type = models.ManyToManyField(ServiceType)
     service_date = models.DateField()
     description = models.TextField(blank=True, null=True)
+    completed = models.BooleanField(default=False)
 
     objects = ServiceManager()
 
@@ -207,6 +224,14 @@ class Service(models.Model):
 
     def get_absolute_url(self):
         return reverse("service-list")
+
+    def calculate_service_revenue(self):
+        total_revenue = 0
+
+        for service_type in self.service_type.all():
+            total_revenue += service_type.price_per_tonnage
+
+        return round(total_revenue, 2)
 
 
 class DeliveryOrder(models.Model):

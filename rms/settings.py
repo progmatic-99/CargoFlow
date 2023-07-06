@@ -26,9 +26,13 @@ SECRET_KEY = "django-insecure-n@z8k@ca0j4r(6n5*kt7xdungs7h*^_)zsb61fcg#nxl5ixcjl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".ngrok-free.app"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".ngrok-free.app",
+]
 
-ngrok_url = "https://1f7f-2405-201-4011-896b-fdc7-a9ae-fdd7-6b07.ngrok-free.app"
+ngrok_url = "https://c544-2401-4900-1c89-8e7f-e195-2b41-e1e7-4813.ngrok-free.app"
 
 
 AUTH_USER_MODEL = "users.User"
@@ -136,4 +140,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CSRF_TRUSTED_ORIGINS = [f"{ngrok_url}"]
 
-LOGIN_URL = '/login'
+LOGIN_URL = "/login"

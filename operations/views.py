@@ -11,6 +11,7 @@ from .models import (
     Shipper,
     Container,
     looseCargo,
+    ForeignVessel,
 )
 from .forms import (
     ServiceCreateForm,
@@ -21,6 +22,7 @@ from .forms import (
     ShipperCreateForm,
     CompanyCreateForm,
     ContainerCreateForm,
+    ForeignVesselCreateForm,
 )
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -44,7 +46,7 @@ def loginPage(request):
         try:
             user = User.objects.get(username=username)
         except:
-            error= "User dont exist! Please Try Again"
+            error = "User dont exist! Please Try Again"
 
         user = authenticate(request, username=username, password=password)
 
@@ -53,9 +55,9 @@ def loginPage(request):
             # email = user.email
             return redirect("index")
         else:
-            error= "Credentials dont match. Please Try Again"
+            error = "Credentials dont match. Please Try Again"
 
-    loginPage_data = {"page": page,'error':error}
+    loginPage_data = {"page": page, "error": error}
     return render(request, "operations/login.html", loginPage_data)
 
 
@@ -70,8 +72,28 @@ class IndexView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["total_vessels"] = Vessel.objects.count()
-        context["total_containers"] = Container.objects.count()
+
+        total_containers = Container.objects.count()
+        context["total_containers"] = total_containers
         context["total_loose_cargo"] = looseCargo.objects.count()
+
+        containers_on_port = Container.objects.filter(on_port=True).count()
+        context["containers_on_port"] = containers_on_port
+
+        containers_on_vessel = total_containers - containers_on_port
+        context["containers_on_vessel"] = containers_on_vessel
+
+        context["incoming_vessels"] = ForeignVessel.objects.count()
+        context["vessels_on_port"] = Vessel.objects.filter(on_port=True).count()
+        context["services_completed"] = Service.objects.filter(completed=True).count()
+        context["outgoing_vessels"] = Vessel.objects.filter(on_port=False).count()
+
+        services = Service.objects.all()
+        total_service_revenue = 0
+        for service in services:
+            total_service_revenue += service.calculate_service_revenue()
+
+        context["total_service_revenue"] = total_service_revenue
 
         return context
 
@@ -348,4 +370,38 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     redirect_field_name = "index"
     model = Container
     template_name = "operations/container_delete.html"
+    success_url = reverse_lazy("index")
+
+
+class ForeignVesselCreate(LoginRequiredMixin, CreateView):
+    redirect_field_name = "index"
+    model = ForeignVessel
+    form_class = ForeignVesselCreateForm
+    template_name = "operations/create_form.html"
+
+
+class ForeignVesselList(LoginRequiredMixin, ListView):
+    login_url = "/login/"
+    redirect_field_name = "index"
+    login_required = True
+    model = ForeignVessel
+    template_name = "operations/foreign_vessel_list.html"
+    paginate_by = 10
+
+
+class ForeignVesselEdit(LoginRequiredMixin, UpdateView):
+    # permission_required = "gobasic.change_customer"
+    login_url = "/login/"
+    redirect_field_name = "index"
+    model = ForeignVessel
+    form_class = ForeignVesselCreateForm
+    template_name = "operations/create_form.html"
+
+
+class ForeignVesselDelete(LoginRequiredMixin, DeleteView):
+    # permission_required = "gobasic.delete_customer"
+    login_url = "/login/"
+    redirect_field_name = "index"
+    model = ForeignVessel
+    template_name = "operations/foreign_vessel_delete.html"
     success_url = reverse_lazy("index")

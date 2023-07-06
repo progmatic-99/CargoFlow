@@ -35,6 +35,10 @@ from .views import (
     ContainerDelete,
     ContainerEdit,
     ContainerList,
+    ForeignVesselCreate,
+    ForeignVesselDelete,
+    ForeignVesselEdit,
+    ForeignVesselList,
 )
 
 
@@ -91,5 +95,23 @@ urlpatterns = [
         "container/delete/<slug:slug>",
         ContainerDelete.as_view(),
         name="container-delete",
+    ),
+    path(
+        "foreign-vessel/create",
+        ForeignVesselCreate.as_view(),
+        name="foreign-vessel-create",
+    ),
+    path(
+        "foreign-vessel/list", ForeignVesselList.as_view(), name="foreign-vessel-list"
+    ),
+    path(
+        "foreign-vessel/edit/<slug:slug>",
+        ForeignVesselEdit.as_view(),
+        name="foreign-vessel-edit",
+    ),
+    path(
+        "foreign-vessel/delete/<slug:slug>",
+        ForeignVesselDelete.as_view(),
+        name="foreign-vessel-delete",
     ),
 ]

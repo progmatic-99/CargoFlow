@@ -7,6 +7,7 @@ from .models import (
     Shipper,
     Company,
     Container,
+    ForeignVessel,
 )
 from django import forms
 
@@ -56,4 +57,10 @@ class CompanyCreateForm(forms.ModelForm):
 class ContainerCreateForm(forms.ModelForm):
     class Meta:
         model = Container
+        fields = "__all__"
+
+
+class ForeignVesselCreateForm(forms.ModelForm):
+    class Meta:
+        model = ForeignVessel
         fields = "__all__"

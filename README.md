@@ -20,3 +20,11 @@
 ### Prototype Development Completed:
 
 ### Run `python manage.py populate_demo_data` to populate demo data
+
+- Containers on port
+- Container on vessel
+- Vessels parked
+- Services completed
+- Services revenue -> service type (price per tonnage)
+- Incoming vessels
+- Outgoing vessels

@@ -2,36 +2,32 @@
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
-    <a href="{% url 'service-create' %} ">
-        <button type="button" class="btn btn-primary">Add Service</button>
+    <a href="{% url 'foreign-vessel-create' %} ">
+        <button type="button" class="btn btn-primary">Add Foreign Vessel</button>
     </a>
 </div>
 
 {% if object_list %}
 <table class="table">
     <thead>
-    <tr>
-        <th scope="col"><strong>Service Type</strong></th>
-        <th scope="col"><strong>Service Date</strong></th>
-        <th scope="col">Description</th>
-        <th scope="col">Vessel</th>
-        <th scope="col">Completed</th>
+      <tr>
+        <th scope="col"><strong>Import No</strong></th>
+        <th scope="col"><strong>Export No</strong></th>
+        <th scope="col">Agent Importer</th>
+        <th scope="col">Purpose of Call</th>
+        <th scope="col">Remarks</th>
         <th scope="col"><strong>Edit</strong></th>
-    </tr>
+      </tr>
     </thead>
     <tbody>
     {% for c in object_list %}
         <tr>
-            <th scope="row">
-                {% for related_obj in c.service_type.all %}
-                <span>{{related_obj.name}}, </span>
-                {% endfor %}
-            </th>
-            <td>{{c.service_date}}</td>
-            <td>{{c.description}}</td>
-            <td>{{c.vessel}}</td>
-            <td>{{c.completed}}</td>
-            <td><a href="{% url 'service-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
+            <th scope="row">{{c.import_no}}</th>
+            <td>{{c.export_no}}</td>
+            <td>{{c.agent_importer}}</td>
+            <td>{{c.purpose_of_call}}</td>
+            <td>{{c.remarks}}</td>
+            <td><a href="{% url 'foreign-vessel-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>
