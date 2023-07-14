@@ -16,6 +16,9 @@ class ServiceCreateForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = "__all__"
+        widgets = {
+            "service_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
 
 
 class ServiceTypeCreateForm(forms.ModelForm):
@@ -34,6 +37,10 @@ class VoyageCreateForm(forms.ModelForm):
     class Meta:
         model = Voyage
         fields = "__all__"
+        widgets = {
+            "departure_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "arrival_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
 
 
 class ConsigneeCreateForm(forms.ModelForm):

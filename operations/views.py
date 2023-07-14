@@ -77,23 +77,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context["total_containers"] = total_containers
         context["total_loose_cargo"] = looseCargo.objects.count()
 
-        containers_on_port = Container.objects.filter(on_port=True).count()
-        context["containers_on_port"] = containers_on_port
-
-        containers_on_vessel = total_containers - containers_on_port
-        context["containers_on_vessel"] = containers_on_vessel
-
-        context["incoming_vessels"] = ForeignVessel.objects.count()
-        context["vessels_on_port"] = Vessel.objects.filter(on_port=True).count()
-        context["services_completed"] = Service.objects.filter(completed=True).count()
-        context["outgoing_vessels"] = Vessel.objects.filter(on_port=False).count()
-
-        services = Service.objects.all()
-        total_service_revenue = 0
-        for service in services:
-            total_service_revenue += service.calculate_service_revenue()
-
-        context["total_service_revenue"] = total_service_revenue
+        context["services_pending"] = Service.objects.filter(completed=False).count()
 
         return context
 
