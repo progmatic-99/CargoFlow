@@ -40,6 +40,9 @@ class VoyageCreateForm(forms.ModelForm):
         widgets = {
             "departure_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "arrival_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "last_port_departure": forms.DateTimeInput(
+                attrs={"type": "datetime-local"}
+            ),
         }
 
 

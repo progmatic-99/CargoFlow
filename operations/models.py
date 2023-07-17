@@ -4,6 +4,7 @@ from django.urls import reverse
 
 # Create your models here.
 from django.utils import timezone
+from datetime import date, datetime
 
 
 class Company(models.Model):
@@ -53,6 +54,19 @@ class Vessel(models.Model):
     name = models.CharField(max_length=200)
     imo_number = models.CharField(max_length=15)
     flag = models.CharField(max_length=50)
+    call_sign = models.CharField(max_length=200, default="NA")
+    official_no = models.IntegerField(default=0)
+    registry_port = models.CharField(max_length=200, default="NA")
+    mmsi = models.IntegerField(default=0)
+    grt = models.IntegerField(default=0)
+    nrt = models.IntegerField(default=0)
+    loa = models.IntegerField(default=0)
+    beam = models.IntegerField(default=0)
+    depth = models.IntegerField(default=0)
+    owner = models.CharField(max_length=200, default="NA")
+    pi_club = models.CharField(max_length=200, default="NA")
+    vessel_type = models.CharField(max_length=200, default="NA")
+    charter_type = models.CharField(max_length=200, default="NA")
     on_port = models.BooleanField(default=True)
 
     def __str__(self):
@@ -133,7 +147,16 @@ class Voyage(models.Model):
     from_port = models.CharField(max_length=200)
     to_port = models.CharField(max_length=200)
     departure_date = models.DateTimeField()
+    next_port_of_call = models.CharField(max_length=200, default="NA")
+    last_port_of_call = models.CharField(max_length=200, default="NA")
+    validity = models.CharField(max_length=200, default="NA")
+    master_name = models.CharField(max_length=200, default="NA")
     arrival_date = models.DateTimeField()
+    last_port_departure = models.DateTimeField(default=date.today)
+    draft_forward = models.CharField(max_length=200, default="NA")
+    draft_aft = models.CharField(max_length=200, default="NA")
+    ship_length = models.PositiveIntegerField(default=0)
+    ship_breadth = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"({self.voyage_number}) - {self.from_port} -> {self.to_port}"
@@ -210,7 +233,7 @@ class Service(models.Model):
     slug = AutoSlugField(populate_from="service_date", unique=True)
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
     service_type = models.ManyToManyField(ServiceType)
-    service_date = models.DateField()
+    service_date = models.DateTimeField(default=datetime.now())
     description = models.TextField(blank=True, null=True)
     completed = models.BooleanField(default=False)
 
