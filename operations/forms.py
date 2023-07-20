@@ -7,7 +7,6 @@ from .models import (
     Shipper,
     Company,
     Container,
-    ForeignVessel,
 )
 from django import forms
 
@@ -28,6 +27,9 @@ class ServiceTypeCreateForm(forms.ModelForm):
 
 
 class VesselCreateForm(forms.ModelForm):
+    VESSEL_TYPES = [("COASTAL", "COASTAL"), ("FOREIGN", "FOREIGN")]
+    vessel_type = forms.ChoiceField(choices=VESSEL_TYPES)
+
     class Meta:
         model = Vessel
         fields = "__all__"
@@ -67,10 +69,4 @@ class CompanyCreateForm(forms.ModelForm):
 class ContainerCreateForm(forms.ModelForm):
     class Meta:
         model = Container
-        fields = "__all__"
-
-
-class ForeignVesselCreateForm(forms.ModelForm):
-    class Meta:
-        model = ForeignVessel
         fields = "__all__"

@@ -11,7 +11,6 @@ from .models import (
     Shipper,
     Container,
     looseCargo,
-    ForeignVessel,
 )
 from .forms import (
     ServiceCreateForm,
@@ -22,7 +21,6 @@ from .forms import (
     ShipperCreateForm,
     CompanyCreateForm,
     ContainerCreateForm,
-    ForeignVesselCreateForm,
 )
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -157,7 +155,20 @@ class VesselCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = "index"
     model = Vessel
     form_class = VesselCreateForm
-    template_name = "operations/create_form.html"
+    template_name = "operations/vessel_form.html"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context["foreign_vessel_fields"] = [
+            "Agent importer",
+            "Purpose of call",
+            "Export no",
+            "Import no",
+            "Cha boe",
+        ]
+
+        return context
 
 
 class VesselList(LoginRequiredMixin, ListView):
@@ -354,38 +365,4 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     redirect_field_name = "index"
     model = Container
     template_name = "operations/container_delete.html"
-    success_url = reverse_lazy("index")
-
-
-class ForeignVesselCreate(LoginRequiredMixin, CreateView):
-    redirect_field_name = "index"
-    model = ForeignVessel
-    form_class = ForeignVesselCreateForm
-    template_name = "operations/create_form.html"
-
-
-class ForeignVesselList(LoginRequiredMixin, ListView):
-    login_url = "/login/"
-    redirect_field_name = "index"
-    login_required = True
-    model = ForeignVessel
-    template_name = "operations/foreign_vessel_list.html"
-    paginate_by = 10
-
-
-class ForeignVesselEdit(LoginRequiredMixin, UpdateView):
-    # permission_required = "gobasic.change_customer"
-    login_url = "/login/"
-    redirect_field_name = "index"
-    model = ForeignVessel
-    form_class = ForeignVesselCreateForm
-    template_name = "operations/create_form.html"
-
-
-class ForeignVesselDelete(LoginRequiredMixin, DeleteView):
-    # permission_required = "gobasic.delete_customer"
-    login_url = "/login/"
-    redirect_field_name = "index"
-    model = ForeignVessel
-    template_name = "operations/foreign_vessel_delete.html"
     success_url = reverse_lazy("index")
