@@ -3,10 +3,10 @@
 {% block content %}
 
 <form method="post">
-    {% csrf_token %}
-    {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
 
 <div class="form-row">
 {% for field in form.visible_fields %}

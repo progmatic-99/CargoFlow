@@ -65,30 +65,20 @@ class Vessel(models.Model):
     depth = models.IntegerField(default=0)
     owner = models.CharField(max_length=200, default="NA")
     pi_club = models.CharField(max_length=200, default="NA")
-    vessel_type = models.CharField(max_length=200, default="NA")
     charter_type = models.CharField(max_length=200, default="NA")
     on_port = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("vessel-list")
-
-
-class ForeignVessel(Vessel):
-    purpose_of_call = models.CharField(max_length=500)
-    import_no = models.CharField(max_length=15)
-    export_no = models.CharField(max_length=15)
+    purpose_of_call = models.CharField(max_length=500, default="NA")
+    import_no = models.CharField(max_length=15, default="NA")
+    export_no = models.CharField(max_length=15, default="NA")
     cha_boe = models.TextField(null=True, blank=True)
-    agent_importer = models.CharField(max_length=200)
+    agent_importer = models.CharField(max_length=200, default="NA")
     remarks = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("foreign-vessel-list")
+        return reverse("vessel-list")
 
 
 class Container(models.Model):
