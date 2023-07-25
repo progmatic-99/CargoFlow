@@ -1,0 +1,61 @@
+{% extends 'shipping/base.html' %}
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
+    <a href="{% url 'cargo-create' %} ">
+        <button type="button" class="btn btn-primary">Add Cargo</button>
+    </a>
+</div>
+
+{% if object_list %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col"><strong>Weight</strong></th>
+        <th scope="col"><strong>Container</strong></th>
+        <th scope="col">Shipper</th>
+        <th scope="col">Consignee</th>
+        <th scope="col">Description</th>
+        <th scope="col"><strong>Edit</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for c in object_list %}
+        <tr>
+            <th scope="row">{{c.weight}}</th>
+            <td>{{c.container}}</td>
+            <td>{{c.shipper.company.name}}</td>
+            <td>{{c.consignee.contact_person}}</td>
+            <td>{{c.description}}</td>
+            <td><a href="{% url 'cargo-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No Entries Detected Yet !</p>
+{% endif %}
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    
+</div>
+
+
+{% endblock %}
