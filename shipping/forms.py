@@ -67,6 +67,24 @@ class VoyageCreateForm(forms.ModelForm):
             "etb": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "departed_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
+        labels = {"etd": "ETD", "eta": "ETA", "etb": "ETB", "grt_nrt": "GRT/NRT"}
+        fields = [
+            "voyage_number",
+            "vessel",
+            "to_port",
+            "next_port_of_call",
+            "last_port_of_call",
+            "eta",
+            "etb",
+            "etd",
+            "master_name",
+            "grt_nrt",
+            "draft",
+            "ship_length",
+            "ship_breadth",
+            "vessel_on_port",
+            "vessel_on_anchorage",
+        ]
 
 
 class ConsigneeCreateForm(forms.ModelForm):

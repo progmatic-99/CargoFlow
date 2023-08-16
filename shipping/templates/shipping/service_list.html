@@ -18,17 +18,22 @@
 
 {% if selected_vessel %}
 <div class="row justify-content-around col-md-offset-5">
-    <div class="">
-        <h4><strong>Vessel Name:</strong> {{ selected_vessel.name }}</h4>
-        <h4><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h4>
-    </div>
-    <div class="justify-content-around">
-        <h5><strong>ETA: </strong> {{ voyage.arrival_date }}</h5>
-    </div>
-    <div class="justify-content-around">
-        <a href="{% url 'job-sheet' voyage.slug %}">
-            <button class="btn btn-success"><i class="fa fa-download"></i> Job Sheet</button>
-        </a>
+    <div class="col justify-content-around m-1 p-1">
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>Vessel Name:</strong> {{ selected_vessel.name }}</h6>
+            <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
+        </div>
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>ETA: </strong> {{ voyage.eta }}</h5>
+            <h6><strong>ETB: </strong> {{ voyage.etb }}</h5>
+            <h6><strong>ETD: </strong> {{ voyage.etd }}</h5>
+            <h6><strong>GRT/NRT: </strong> {{ voyage.grt_nrt }}</h5>
+        </div>
+        <div class="row justify-content-end m-1 p-1">
+            <a href="{% url 'job-sheet' voyage.slug %}">
+                <button class="btn btn-success"><i class="fa fa-download"></i> Job Sheet</button>
+            </a>
+        </div>
     </div>
 </div>
 

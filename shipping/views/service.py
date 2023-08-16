@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import HttpResponse
 from django.template.loader import render_to_string
-from xhtml2pdf import pisa
+import weasyprint
 
 from shipping.models.service import Service
 from shipping.models.vessel import Vessel
@@ -13,6 +13,7 @@ from shipping.forms import (
     ServiceCreateForm,
     VesselSelectionForm,
 )
+from rms.settings import BASE_DIR
 
 
 class ServiceCreate(LoginRequiredMixin, CreateView):
@@ -96,20 +97,17 @@ class JobSheetPdf(LoginRequiredMixin, ListView):
             }
             html_content = render_to_string(self.template_name, ctx).encode("utf-8")
 
-            from io import BytesIO
-
-            pdf = BytesIO()
-
-            pisa.CreatePDF(html_content, pdf)
-            # Get the PDF content from the BytesIO object
-            pdf_content = pdf.getvalue()
-
             response = HttpResponse(content_type="application/pdf")
             response[
                 "Content-Disposition"
             ] = f'attachment; filename="{voyage.voyage_number}-job-sheet.pdf"'
-            response.write(pdf_content)
-
-            return response
+            weasyprint.HTML(string=html_content).write_pdf(
+                response,
+                stylesheets=[
+                    weasyprint.CSS(
+                        f"{BASE_DIR}/shipping/static/shipping/css/sb-admin-2.min.css"
+                    )
+                ],
+            )
 
             return response
