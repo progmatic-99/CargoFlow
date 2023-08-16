@@ -14,7 +14,11 @@
         <th scope="col"><strong>Name</strong></th>
         <th scope="col"><strong>IMO no.</strong></th>
         <th scope="col">Flag</th>
-        <th scope="col">On Port</th>
+        <th scope="col">IGM No</th>
+        <th scope="col">EGM No</th>
+        <th scope="col">CHA BOE</th>
+        <th scope="col">Agent Importer</th>
+        <th scope="col">Remarks</th>
         <th scope="col"><strong>Edit</strong></th>
     </tr>
     </thead>
@@ -24,7 +28,11 @@
             <th scope="row">{{c.name}}</th>
             <td>{{c.imo_number}}</td>
             <td>{{c.flag}}</td>
-            <td>{{c.on_port}}</td>
+            <td>{{c.import_no}}</td>
+            <td>{{c.export_no}}</td>
+            <td>{{c.cha_boe}}</td>
+            <td>{{c.agent_importer}}</td>
+            <td>{{c.remarks}}</td>
             <td><a href="{%url 'vessel-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}

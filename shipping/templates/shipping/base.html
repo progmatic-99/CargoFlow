@@ -83,21 +83,23 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="{% url 'service-create' %}"
-                >Create Service</a
-              >
-              <a class="collapse-item" href="{% url 'service-type-create' %}"
-                >Create Service Type</a
-              >
               <a class="collapse-item" href="{% url 'vessel-create' %}"
                 >Vessel</a
               >
               <a class="collapse-item" href="{% url 'voyage-create' %}"
                 >Voyage</a
               >
+              <a class="collapse-item" href="{% url 'service-create' %}"
+                >Create Service</a
+              >
+              <a class="collapse-item" href="{% url 'service-type-create' %}"
+                >Create Service Type</a
+              >
+              <a class="collapse-item" href="{% url 'vessel-list' %}">Vessels List</a>
               <a class="collapse-item" href="{% url 'service-list' %}"
                 >Job Sheet</a
               >
+              <a class="collapse-item" href="{% url 'company-create' %}">Company</a>
             </div>
           </div>
         </li>
@@ -121,12 +123,7 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="{% url 'service-list' %}">Service</a>
-              <a class="collapse-item" href="{% url 'service-type-list' %}">Service Type</a>
-              <a class="collapse-item" href="{% url 'vessel-list' %}">Vessel</a>
-              <a class="collapse-item" href="{% url 'voyage-list' %}">Voyage</a>
               <a class="collapse-item" href="{% url 'consignee-list' %}">Consignee</a>
-              <a class="collapse-item" href="{% url 'company-list' %}">Company</a>
               <a class="collapse-item" href="{% url 'shipper-list' %}">Shipper</a>
               <a class="collapse-item" href="{% url 'container-list' %}">Container</a>
             </div>
@@ -152,14 +149,6 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="{% url 'service-list' %}">Service</a>
-              <a class="collapse-item" href="{% url 'service-type-list' %}">Service Type</a>
-              <a class="collapse-item" href="{% url 'vessel-list' %}">Vessel</a>
-              <a class="collapse-item" href="{% url 'voyage-list' %}">Voyage</a>
-              <a class="collapse-item" href="{% url 'consignee-list' %}">Consignee</a>
-              <a class="collapse-item" href="{% url 'company-list' %}">Company</a>
-              <a class="collapse-item" href="{% url 'shipper-list' %}">Shipper</a>
-              <a class="collapse-item" href="{% url 'container-list' %}">Container</a>
             </div>
           </div>
         </li>

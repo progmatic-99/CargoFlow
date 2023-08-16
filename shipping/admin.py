@@ -5,24 +5,22 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from shipping.admin_site import CustomAdminSite
+from .models.container import Container
+from .models.bol import BillOfLading
+from .models.cargo import Cargo
+from .models.company import Company
+from .models.consignee import Consignee
+from .models.container import ContainerStatus
+from .models.delivery_order import DeliveryOrder
+from .models.manifest import Manifest
+from .models.port_handling import PortHandling
+from .models.service import Service
+from .models.service_type import ServiceType
+from .models.shipper import Shipper
+from .models.vessel import Vessel
+from .models.voyage import Voyage
+from .models.loose_cargo import looseCargo
 
-from .models import (
-    BillOfLading,
-    Cargo,
-    Company,
-    Consignee,
-    Container,
-    ContainerStatus,
-    DeliveryOrder,
-    Manifest,
-    PortHandling,
-    Service,
-    ServiceType,
-    Shipper,
-    Vessel,
-    Voyage,
-    looseCargo,
-)
 
 admin_site = CustomAdminSite(name="myadmin")
 

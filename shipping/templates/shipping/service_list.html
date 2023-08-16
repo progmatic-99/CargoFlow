@@ -17,13 +17,18 @@
 </form>
 
 {% if selected_vessel %}
-<div class="col-auto">
-    <div class="row justify-content-between mb-4">
-        <h4>Vessel Name: {{ selected_vessel.name }}</h4>
-        <h4>Voyage No: {{ voyage.voyage_number }}</h4>
+<div class="row justify-content-around col-md-offset-5">
+    <div class="">
+        <h4><strong>Vessel Name:</strong> {{ selected_vessel.name }}</h4>
+        <h4><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h4>
     </div>
-    <div class="row mb-4">
-        <h5>ETA: {{ voyage.arrival_date }}</h5>
+    <div class="justify-content-around">
+        <h5><strong>ETA: </strong> {{ voyage.arrival_date }}</h5>
+    </div>
+    <div class="justify-content-around">
+        <a href="{% url 'job-sheet' voyage.slug %}">
+            <button class="btn btn-success"><i class="fa fa-download"></i> Job Sheet</button>
+        </a>
     </div>
 </div>
 
@@ -32,22 +37,24 @@
     <tr>
         <th scope="col"><strong>Service Type</strong></th>
         <th scope="col"><strong>Service Date</strong></th>
-        <th scope="col">Description</th>
+        <th scope="col"><strong>Description</strong></th>
         <th scope="col"><strong>Edit</strong></th>
+        <th scope="col"><strong>Delivery Challan</strong></th>
     </tr>
     </thead>
     <tbody id="service-table-body">
         {% for c in related_services %}
+        {% for related_obj in c.service_type.all %}
         <tr>
             <th scope="row">
-                {% for related_obj in c.service_type.all %}
-                <span>{{related_obj.name}}, </span>
-                {% endfor %}
+                <span>{{related_obj.name}}</span>
             </th>
             <td>{{c.service_date}}</td>
             <td>{{c.description}}</td>
             <td><a href="{% url 'service-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{% url 'delivery-challan' c.slug %}"><button class="btn"><i class="fa fa-download"></i></button></a></td>
         </tr>
+        {% endfor %}
         {% endfor %}
     </tbody>
 </table>
