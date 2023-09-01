@@ -8,13 +8,6 @@
   {{ hidden }}
   {% endfor %}
 
-  <div class="form-row">
-    <div class="form-group col-md-4 col-md-offset-5 align-center" style="margin-top:30px;">
-      <label for="{{ form.vessel_type.id_for_label }}">{{ form.vessel_type.label_tag }}</label>
-      {{ form.vessel_type|add_class:'form-control' }}
-    </div>
-  </div>
-
 <div class="form-row">
 {% for field in form.visible_fields %}
   {% if field.label != 'Vessel type' %}
@@ -55,13 +48,15 @@
 
 </form>
 <script type="text/javascript">
-let dropdown = document.getElementById("id_vessel_type");
+let dropdown = document.getElementById("id_vessel");
 let divs = document.querySelectorAll(".foreign-vessel-fields");
 
 dropdown.addEventListener("change", function () {
-  let value = dropdown.value;
+  let text = dropdown.options[dropdown.selectedIndex].text;
+  let vesselType = text.split("-")[1];
+  console.log(vesselType);
 
-  if (value == "FOREIGN") {
+  if (vesselType == "FOREIGN") {
     divs.forEach(function (div) {
       div.classList.remove("foreign-vessel-fields");
     });

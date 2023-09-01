@@ -12,12 +12,35 @@ from django import forms
 
 
 class ServiceCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.empty_permitted = True
+
+        # Remove labels from the fields
+        for field_name, field in self.fields.items():
+            field.label = ""
+
     class Meta:
         model = Service
-        fields = "__all__"
+        fields = [
+            "vessel",
+            "voyage",
+            "service_type",
+            "service_date",
+            "description",
+            "completed",
+        ]
         widgets = {
             "service_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "service_type": forms.Select(),
         }
+
+
+ServiceCreateFormSet = forms.modelformset_factory(
+    Service,
+    form=ServiceCreateForm,
+    extra=1,
+)
 
 
 class ServiceTypeCreateForm(forms.ModelForm):
@@ -25,8 +48,8 @@ class ServiceTypeCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True  # allow empty forms to submit
 
-        for visible in self.visible_fields():
-            visible.field.widget.attrs["class"] = "form-control"
+        for field_name, field in self.fields.items():
+            field.label = ""
 
     class Meta:
         model = ServiceType
@@ -41,20 +64,17 @@ ServiceTypeCreateFormSet = forms.modelformset_factory(
 )
 
 
-class VesselSelectionForm(forms.ModelForm):
+class VesselSelectionServiceForm(forms.ModelForm):
     class Meta:
-        model = Vessel
-        fields = ["name"]
-        widgets = {"name": forms.Select()}
+        model = Voyage
+        exclude = ["all"]
 
 
 class VesselCreateForm(forms.ModelForm):
-    VESSEL_TYPES = [("COASTAL", "COASTAL"), ("FOREIGN", "FOREIGN")]
-    vessel_type = forms.ChoiceField(choices=VESSEL_TYPES)
-
     class Meta:
         model = Vessel
         fields = "__all__"
+        labels = {"loa": "LOA", "beam": "BEAM", "mmsi": "MMSI", "imo_number": "IMO No"}
 
 
 class VoyageCreateForm(forms.ModelForm):
@@ -67,21 +87,37 @@ class VoyageCreateForm(forms.ModelForm):
             "etb": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "departed_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
-        labels = {"etd": "ETD", "eta": "ETA", "etb": "ETB", "grt_nrt": "GRT/NRT"}
+        labels = {
+            "etd": "ETD",
+            "eta": "ETA",
+            "etb": "ETB",
+            "grt": "GRT",
+            "nrt": "NRT",
+            "cha_boe": "CHA BOE",
+            "import_no": "Import No",
+            "export_no": "Export No",
+        }
         fields = [
             "voyage_number",
             "vessel",
             "to_port",
             "next_port_of_call",
             "last_port_of_call",
+            "master_name",
             "eta",
             "etb",
             "etd",
-            "master_name",
-            "grt_nrt",
+            "grt",
+            "nrt",
             "draft",
-            "ship_length",
-            "ship_breadth",
+            "owner",
+            "pi_club",
+            "purpose_of_call",
+            "import_no",
+            "export_no",
+            "cha_boe",
+            "agent_importer",
+            "remarks",
             "vessel_on_port",
             "vessel_on_anchorage",
         ]
@@ -103,6 +139,7 @@ class CompanyCreateForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = "__all__"
+        labels = {"ifsc_code": "IFSC Code"}
 
 
 class ContainerCreateForm(forms.ModelForm):

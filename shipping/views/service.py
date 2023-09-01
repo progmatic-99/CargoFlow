@@ -2,7 +2,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, redirect
 from django.template.loader import render_to_string
 import weasyprint
 
@@ -11,7 +11,8 @@ from shipping.models.vessel import Vessel
 from shipping.models.voyage import Voyage
 from shipping.forms import (
     ServiceCreateForm,
-    VesselSelectionForm,
+    VesselSelectionServiceForm,
+    ServiceCreateFormSet,
 )
 from rms.settings import BASE_DIR
 
@@ -23,25 +24,51 @@ class ServiceCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = "index"
     model = Service
     form_class = ServiceCreateForm
-    template_name = "shipping/create_form.html"
+    template_name = "shipping/formset.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["heading"] = "Service Registration"
+        context["button_heading"] = "Add Service"
+        context["table_headings"] = [
+            "Vessel",
+            "Voyage",
+            "Service Type",
+            "Service Date",
+            "Description",
+            "Completed",
+        ]
+        context["formset"] = ServiceCreateFormSet(
+            queryset=Service.objects.none(),
+        )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        formset = ServiceCreateFormSet(data=request.POST)
+
+        for form in formset:
+            if form.is_valid():
+                form.save()
+            else:
+                return self.render_to_response({"formset": formset})
+
+        return redirect(reverse_lazy("service-list"))
 
 
 class ServiceList(FormView):
     template_name = "shipping/service_list.html"
-    form_class = VesselSelectionForm
+    form_class = VesselSelectionServiceForm
     success_url = reverse_lazy("service-list")
 
     def form_valid(self, form):
-        selected_vessel = Vessel.objects.filter(name=form.cleaned_data["name"]).first()
-        voyage = selected_vessel.voyage_set.first()
-        related_services = Service.objects.filter(vessel=selected_vessel).order_by(
+        selected_voyage = Voyage.objects.filter(name=form.cleaned_data["name"]).first()
+        related_services = Service.objects.filter(voyage=selected_voyage).order_by(
             "-service_date"
         )
         context = self.get_context_data(
             form=form,
-            selected_vessel=selected_vessel,
+            selected_voyage=selected_voyage,
             related_services=related_services,
-            voyage=voyage,
         )
         return self.render_to_response(context)
 
@@ -51,7 +78,7 @@ class ServiceList(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["vessels"] = Vessel.objects.all()
+        context["voyages"] = Voyage.objects.all()
         return context
 
 
@@ -78,7 +105,7 @@ class DeliveryChallan(LoginRequiredMixin, ListView):
 
 
 class JobSheetPdf(LoginRequiredMixin, ListView):
-    template_name = "shipping/pdf/job_sheet.html"
+    template_name = "shipping/pdf/service_report.html"
 
     def get(self, request, slug):
         voyage = Voyage.objects.filter(slug=slug).first()

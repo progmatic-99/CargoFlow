@@ -1,0 +1,77 @@
+{% extends 'shipping/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="row justify-content-between">
+  <h3>{{ heading }}</h3>
+  <button type="button" id="add-form" class="btn btn-info">
+    <span class="glyphicon glyphicon-ok"></span>{{ button_heading }}
+  </button>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+
+  {{ formset.management_form }}
+  <table class="table">
+    <thead>
+      <tr>
+        {% for heading in table_headings %}
+          <th><strong>{{ heading }}</strong></th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody id="formset">
+      {% for form in formset %}
+      <tr class="formset-form">
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+        <td>
+          {{ field|add_class:'form-control' }}
+          {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+          {% endfor %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-5 row justify-content-around">
+    <div class="form-group col-md-4 col-md-offset-5 align-center">
+      <button type="submit" class="btn btn-success">
+        <span class="glyphicon glyphicon-ok"></span> Save
+      </button>
+      <a href="{% url 'index' %}">
+        <button type="button" class="btn btn-danger">
+          <span class="glyphicon glyphicon-remove"></span> Cancel
+        </button>
+      </a>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+    const addButton = document.getElementById('add-form');
+    const formsetDiv = document.getElementById('formset');
+
+    addButton.addEventListener('click', function() {
+        const formCount = formsetDiv.querySelectorAll(".formset-form").length;
+        let newForm = document.createElement('tr');
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        newForm.innerHTML = '{{ formset.empty_form|escapejs }}'.replace(/__prefix__/g, formCount);
+        newForm.innerHTML = newForm.innerHTML.replace(/<th\b[^>]*>(.*?)<\/th>/gi, '');
+
+
+        newForm.className = "formset-form";
+
+        totalForms.setAttribute('value', `${formCount+1}`)
+        formsetDiv.appendChild(newForm);
+      });
+</script>
+
+{% endblock %}

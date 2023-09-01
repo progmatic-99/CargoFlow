@@ -10,25 +10,25 @@
 {% if object_list %}
 <table class="table">
     <thead>
-      <tr>
+    <tr>
         <th scope="col"><strong>Voyage Number</strong></th>
         <th scope="col"><strong>Vessel</strong></th>
-        <th scope="col">From Port</th>
         <th scope="col">To Port</th>
-        <th scope="col">Departure Date</th>
-        <th scope="col">Arrival Date</th>
+        <th scope="col">ETA</th>
+        <th scope="col">ETB</th>
+        <th scope="col">ETD</th>
         <th scope="col"><strong>Edit</strong></th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
     {% for c in object_list %}
         <tr>
             <th scope="row">{{c.voyage_number}}</th>
             <td>{{c.vessel}}</td>
-            <td>{{c.from_port}}</td>
             <td>{{c.to_port}}</td>
-            <td>{{c.departure_date}}</td>
-            <td>{{c.arrival_date}}</td>
+            <td>{{c.eta}}</td>
+            <td>{{c.etb}}</td>
+            <td>{{c.etd}}</td>
             <td><a href="{%url 'voyage-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}

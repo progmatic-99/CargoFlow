@@ -1,7 +1,6 @@
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.urls import reverse
-from datetime import datetime
 
 from .vessel import Vessel
 from .voyage import Voyage
@@ -18,7 +17,7 @@ class Service(models.Model):
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE, null=True)
     service_type = models.ManyToManyField(ServiceType)
-    service_date = models.DateTimeField(default=datetime.now())
+    service_date = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
     completed = models.BooleanField(default=False)
 

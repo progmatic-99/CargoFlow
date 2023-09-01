@@ -14,12 +14,20 @@ class ServiceTypeCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = "index"
     model = ServiceType
     form_class = ServiceTypeCreateForm
-    template_name = "shipping/service_type_form.html"
+    template_name = "shipping/formset.html"
     success_url = reverse_lazy("index")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["service_type_formset"] = ServiceTypeCreateFormSet(
+        context["heading"] = "Service Type Registration"
+        context["button_heading"] = "Add Service Type"
+        context["table_headings"] = [
+            "Name",
+            "Company",
+            "Price per tonnage",
+            "Description",
+        ]
+        context["formset"] = ServiceTypeCreateFormSet(
             queryset=ServiceType.objects.none(),
             initial=[
                 {
@@ -39,7 +47,7 @@ class ServiceTypeCreate(LoginRequiredMixin, CreateView):
             if form.is_valid():
                 form.save()
             else:
-                return self.render_to_response({"service_type_formset": formset})
+                return self.render_to_response({"formset": formset})
 
         return redirect(reverse_lazy("service-type-list"))
 
@@ -56,7 +64,6 @@ class ServiceTypeList(LoginRequiredMixin, ListView):
         ctx = super().get_context_data(**kwargs)
         object_list = ServiceType.objects.all().order_by("-id")
         ctx["object_list"] = object_list
-        print(object_list)
 
         return ctx
 

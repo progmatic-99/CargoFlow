@@ -2,36 +2,41 @@
 {% block content %}
 <form method="POST">
     {% csrf_token %}
-    <div class="form-group col-md-4 col-md-offset-5 align-center justify-content-between" style="margin-top:30px;">
+    <div class="form-group row-md-4 row-md-offset-5 align-center" style="margin-top:30px;">
         <h2><strong>Job Sheet</strong></h2>
         <select name="{{ form.name.name }}" id="{{ form.name.id_for_label }}">
-            <option value="" selected disabled>Select Vessel</option>
-            {% for vessel in vessels %}
-                <option value="{{ vessel }}">{{ vessel.name }}</option>
-            {% endfor %}
+            {% if voyages %}
+                <option value="" selected disabled>Select Voyage</option>
+                {% for voyage in voyages %}
+                    <option value="{{ voyage.slug }}">{{ voyage }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="" selected disabled>Create voyages first!!</option>
+            {% endif %}
         </select>
-        <button type="submit" class="btn btn-success">
+        <button type="submit" class="btn mt-2 btn-success">
             <span class="glyphicon glyphicon-ok"></span> Get Services
         </button>
     </div>
 </form>
 
-{% if selected_vessel %}
+{% if selected_voyage %}
 <div class="row justify-content-around col-md-offset-5">
     <div class="col justify-content-around m-1 p-1">
         <div class="row justify-content-around m-1 p-1">
-            <h6><strong>Vessel Name:</strong> {{ selected_vessel.name }}</h6>
-            <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
+            <h6><strong>Vessel Name:</strong> {{ selected_voyage }}</h6>
+            <h6><strong>Voyage No:</strong> {{ selected_voyage.voyage_number }}</h6>
         </div>
         <div class="row justify-content-around m-1 p-1">
-            <h6><strong>ETA: </strong> {{ voyage.eta }}</h5>
-            <h6><strong>ETB: </strong> {{ voyage.etb }}</h5>
-            <h6><strong>ETD: </strong> {{ voyage.etd }}</h5>
-            <h6><strong>GRT/NRT: </strong> {{ voyage.grt_nrt }}</h5>
+            <h6><strong>ETA: </strong> {{ selected_voyage.eta }}</h6>
+            <h6><strong>ETB: </strong> {{ selected_voyage.etb }}</h6>
+            <h6><strong>ETD: </strong> {{ selected_voyage.etd }}</h6>
+            <h6><strong>GRT: </strong> {{ selected_voyage.grt }}</h6>
+            <h6><strong>NRT: </strong> {{ selected_voyage.nrt }}</h5>
         </div>
         <div class="row justify-content-end m-1 p-1">
-            <a href="{% url 'job-sheet' voyage.slug %}">
-                <button class="btn btn-success"><i class="fa fa-download"></i> Job Sheet</button>
+            <a href="{% url 'job-sheet' selected_voyage.slug %}">
+                <button class="btn btn-success"><i class="fa fa-download"></i>Service Report</button>
             </a>
         </div>
     </div>
