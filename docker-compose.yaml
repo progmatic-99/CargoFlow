@@ -1,0 +1,17 @@
+version: "3.8.10"
+
+services:
+  web:
+    build: .
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - init
+
+  init:
+    command: sh /app/init.sh
+    volumes:
+      - .:/app
