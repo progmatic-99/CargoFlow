@@ -1,25 +1,15 @@
-# Pull base image
-FROM python:3.10.2-slim-bullseye
+FROM python:3.8.17-alpine
 
-# Set environment variables
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+RUN apk --update --upgrade add py3-pip py3-pillow py3-cffi py3-brotli gcc musl-dev python3-dev pango libffi-dev jpeg-dev
 
-ENV DJANGO_SETTINGS_MODULE=rms.settings
-ENV DEBUG=True
+ENV POETRY_HOME=/opt/poetry \
+    POETRY_VIRTUALENVS_IN_PROJECT=false \
+    POETRY_NO_INTERACTION=1 \
+    DJANGO_SETTINGS_MODULE=rms.settings
 
-# Install system dependencies and poetry
-RUN apt-get update && apt-get install -y \
-    apt-get install libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 -y \
-    libpq-dev && \
-    curl -sSL https://install.python-poetry.org | python3 -
+RUN pip3 install poetry
 
-# Set the working directory in the container
 WORKDIR /app
-
 COPY . /app/
-
-# Install dependencies using poetry
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false && poetry install --no-dev
+RUN sh init.sh

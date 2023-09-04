@@ -5,4 +5,4 @@ python manage.py makemigrations
 python manage.py migrate
 
 # Create a superuser (modify as needed)
-python -c "import django;django.setup();django.contrib.auth.models.User.objects.create_superuser('rms', 'rms@rms.com', 'rms')"
+python -c "import django;django.setup();from users.models import User;User.objects.create_superuser('rms@rms.com', 'rms')"
