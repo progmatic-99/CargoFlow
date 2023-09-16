@@ -3,13 +3,11 @@
 ## Run project
 
 - ### Activates the shell
-  `poetry shell`
+  `virtualenv env`
 - ### Install dependencies
-  `poetry install`
-- ### To add a dependency
-  `poetry add {dependency}`
+  `pip3 install -r requirements.txt`
 - ### Run the project
-  `python manage.py runserver`
+  `python3 manage.py runserver`
 
 ## Port Management Software
 
@@ -18,8 +16,3 @@
 ### Prototype Partner: Shubham
 
 ### Prototype Development Completed:
-
-### Installation via pip
-
-- virtualenv env
-- python3 manage.py runserver
