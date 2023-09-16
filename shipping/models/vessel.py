@@ -29,9 +29,6 @@ class Vessel(models.Model):
     loa = models.FloatField()
     beam = models.FloatField()
     depth = models.FloatField()
-    length = models.FloatField()
-    breadth = models.FloatField()
-    charter_type = models.CharField(max_length=40)
 
     def __str__(self):
         return f"{self.name}-{self.vessel_type}"

@@ -1,10 +1,12 @@
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from shipping.models.container import Container
-from shipping.forms import ContainerCreateForm
+from cargo.models.container import Container
+from cargo.forms import ContainerCreateForm
+from shipping.forms import VoyageSelectionForm
+from shipping.models.voyage import Voyage
+from cargo.models.bol import BillOfLading
 
 
 class ContainerCreate(LoginRequiredMixin, CreateView):
@@ -14,13 +16,25 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
     template_name = "shipping/create_form.html"
 
 
-class ContainerList(LoginRequiredMixin, ListView):
+class ContainerList(FormView):
     login_url = "/login/"
     redirect_field_name = "index"
     login_required = True
-    model = Container
-    template_name = "shipping/container_list.html"
+    template_name = "cargo/container_list.html"
     paginate_by = 10
+    form_class = VoyageSelectionForm
+
+    def form_valid(self, form):
+        selected_voyage = Voyage.objects.filter(
+            voyage_number=form.cleaned_data["voyages"]
+        ).first()
+        related_bols = BillOfLading.objects.filter(voyage=selected_voyage).all()
+        context = self.get_context_data(
+            form=form,
+            selected_voyage=selected_voyage,
+            related_bols=related_bols,
+        )
+        return self.render_to_response(context)
 
 
 class ContainerEdit(LoginRequiredMixin, UpdateView):

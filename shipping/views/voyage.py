@@ -16,6 +16,7 @@ class VoyageCreate(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        context["heading"] = "Voyage Registration"
 
         context["foreign_vessel_fields"] = [
             "Agent importer",

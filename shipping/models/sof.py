@@ -2,7 +2,6 @@ from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.urls import reverse
 
-from .vessel import Vessel
 from .voyage import Voyage
 
 
@@ -20,7 +19,6 @@ class SOF(models.Model):
     pilot_on_board_for_departure = models.DateTimeField()
     tugs_line = models.DateTimeField()
     vessel_shifting = models.TextField(blank=True, null=True)
-    vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
     class Meta:

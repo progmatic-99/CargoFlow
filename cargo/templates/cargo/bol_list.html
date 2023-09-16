@@ -4,10 +4,10 @@
 <form method="POST">
     {% csrf_token %}
     <div class="form-group row-md-4 row-md-offset-5 align-center" style="margin-top:30px;">
-        <h2><strong>Service Report</strong></h2>
+        <h2><strong>Bill Of Ladings</strong></h2>
             {{ form }}
         <button type="submit" class="btn mt-2 btn-success">
-            <span class="glyphicon glyphicon-ok"></span> Get Services
+            <span class="glyphicon glyphicon-ok"></span> Get BLs
         </button>
     </div>
 </form>
@@ -23,12 +23,10 @@
             <h6><strong>ETA: </strong> {{ selected_voyage.eta }}</h6>
             <h6><strong>ETB: </strong> {{ selected_voyage.etb }}</h6>
             <h6><strong>ETD: </strong> {{ selected_voyage.etd }}</h6>
-            <h6><strong>GRT: </strong> {{ selected_voyage.grt }}</h6>
-            <h6><strong>NRT: </strong> {{ selected_voyage.nrt }}</h5>
         </div>
         <div class="row justify-content-end m-1 p-1">
-            <a href="{% url 'job-sheet' selected_voyage.slug %}">
-                <button class="btn btn-success"><i class="fa fa-download"></i>Service Report</button>
+            <a href="{% url 'get-manifest' selected_voyage.slug %}">
+                <button class="btn btn-success"><i class="fa fa-download"></i>Get Manifest</button>
             </a>
         </div>
     </div>
@@ -37,23 +35,29 @@
 <table class="table">
     <thead>
     <tr>
-        <th scope="col"><strong>Service Type</strong></th>
-        <th scope="col"><strong>Service Date</strong></th>
+        <th scope="col"><strong>S.no</strong></th>
+        <th scope="col"><strong>BL</strong></th>
+        <th scope="col"><strong>Mark</strong></th>
+        <th scope="col"><strong>No. of Pkg</strong></th>
         <th scope="col"><strong>Description</strong></th>
-        <th scope="col"><strong>Edit</strong></th>
-        <th scope="col"><strong>Delivery Challan</strong></th>
+        <th scope="col"><strong>Weight</strong></th>
+        <th scope="col"><strong>Shipper</strong></th>
+        <th scope="col"><strong>Consignee</strong></th>
     </tr>
     </thead>
     <tbody id="service-table-body">
-        {% for c in related_services %}
+        {% for c in related_bols %}
         <tr>
+            <td>{{ c.id }}</td>
             <th scope="row">
-                <span>{{c.service_type.name}}</span>
+                <span>{{c.bol_number}}</span>
             </th>
-            <td>{{c.service_date}}</td>
+            <td>{{c.mark}}</td>
+            <td>{{c.no_of_pkg}} Pkgs</td>
             <td>{{c.description}}</td>
-            <td><a href="{% url 'service-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
-            <td><a href="{% url 'delivery-challan' c.service_type.slug %}"><button class="btn"><i class="fa fa-download"></i></button></a></td>
+            <td>{{c.weight}} Kgs</td>
+            <td>{{c.shipper}}</td>
+            <td>{{c.consignee}}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -2,15 +2,26 @@
 {% load widget_tweaks %}
 {% block content %}
 
-<div class="row justify-content-between">
+<div class="form-row justify-content-between">
   <h3>{{ heading }}</h3>
   <button type="button" id="add-form" class="btn btn-info">
     <span class="glyphicon glyphicon-ok"></span>{{ button_heading }}
   </button>
 </div>
 
-<form method="post">
+<form method="post" class="mt-4">
   {% csrf_token %}
+
+  {% if constant_form %}
+  <div class="form-row">
+    {% for field in constant_form %}
+    <div class="form-group col-md-4 col-md-offset-5 align-center">
+      <label for="{{ field.id_for_label }}"><strong>{{ field.label }}</strong></label>
+      {{ field|add_class:'form-control' }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   {{ formset.management_form }}
   <table class="table">
@@ -65,7 +76,6 @@
 
         newForm.innerHTML = '{{ formset.empty_form|escapejs }}'.replace(/__prefix__/g, formCount);
         newForm.innerHTML = newForm.innerHTML.replace(/<th\b[^>]*>(.*?)<\/th>/gi, '');
-
 
         newForm.className = "formset-form";
 

@@ -27,29 +27,11 @@ from .views.voyage import (
     VoyageList,
     VoyageDelete,
 )
-from .views.shipper import (
-    ShipperCreate,
-    ShipperDelete,
-    ShipperEdit,
-    ShipperList,
-)
 from .views.company import (
     CompanyCreate,
     CompanyDelete,
     CompanyEdit,
     CompanyList,
-)
-from .views.consignee import (
-    ConsigneeCreate,
-    ConsigneeDelete,
-    ConsigneeEdit,
-    ConsigneeList,
-)
-from .views.container import (
-    ContainerCreate,
-    ContainerDelete,
-    ContainerEdit,
-    ContainerList,
 )
 
 
@@ -94,32 +76,9 @@ urlpatterns = [
     path("voyage/list", VoyageList.as_view(), name="voyage-list"),
     path("voyage/edit/<slug:slug>", VoyageEdit.as_view(), name="voyage-edit"),
     path("voyage/delete/<slug:slug>", VoyageDelete.as_view(), name="voyage-delete"),
-    # shipper views
-    path("shipper/create", ShipperCreate.as_view(), name="shipper-create"),
-    path("shipper/list", ShipperList.as_view(), name="shipper-list"),
-    path("shipper/edit/<slug:slug>", ShipperEdit.as_view(), name="shipper-edit"),
-    path("shipper/delete/<slug:slug>", ShipperDelete.as_view(), name="shipper-delete"),
     # company views
     path("company/create", CompanyCreate.as_view(), name="company-create"),
     path("company/list", CompanyList.as_view(), name="company-list"),
     path("company/edit/<slug:slug>", CompanyEdit.as_view(), name="company-edit"),
     path("company/delete/<slug:slug>", CompanyDelete.as_view(), name="company-delete"),
-    # consignee views
-    path("consignee/create", ConsigneeCreate.as_view(), name="consignee-create"),
-    path("consignee/list", ConsigneeList.as_view(), name="consignee-list"),
-    path("consignee/edit/<slug:slug>", ConsigneeEdit.as_view(), name="consignee-edit"),
-    path(
-        "consignee/delete/<slug:slug>",
-        ConsigneeDelete.as_view(),
-        name="consignee-delete",
-    ),
-    # container views
-    path("container/create", ContainerCreate.as_view(), name="container-create"),
-    path("container/list", ContainerList.as_view(), name="container-list"),
-    path("container/edit/<slug:slug>", ContainerEdit.as_view(), name="container-edit"),
-    path(
-        "container/delete/<slug:slug>",
-        ContainerDelete.as_view(),
-        name="container-delete",
-    ),
 ]

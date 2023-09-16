@@ -19,12 +19,7 @@
 
 ### Prototype Development Completed:
 
-### Run `python manage.py populate_demo_data` to populate demo data
+### Installation via pip
 
-- Containers on port
-- Container on vessel
-- Vessels parked
-- Services completed
-- Services revenue -> service type (price per tonnage)
-- Incoming vessels
-- Outgoing vessels
+- virtualenv env
+- python3 manage.py runserver
