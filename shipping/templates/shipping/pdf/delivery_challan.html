@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load widget_tweaks %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+      href="{% static 'shipping/vendor/fontawesome-free/css/all.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link
+      href="{% static 'shipping/css/sb-admin-2.min.css' %}"
+      rel="stylesheet"
+    />
+  <title>Job Sheet for {{ vessel.name }}</title>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container-fluid">
+      <div class="row justify-content-center"><h2>Delivery Challan</h2></div>
+      <div class="row justify-content-around m-1 p-1">
+        <h5><strong>Date: </strong> {{ voyage.eta }}</h5>
+        <h5><strong>Port: </strong> {{ voyage.etb }}</h5>
+        <h5><strong>Vessel: </strong> {{ voyage.vessel.name }}</h5>
+      </div>
+      <div class="row">
+        <p>I hereby confirm the receipt...</p>
+        <h5><strong>Master:</strong> {{ voyage.master_name }}</h5>
+      </div>
+
+    </div>
+  </div>
+  
+</body>
+</html>

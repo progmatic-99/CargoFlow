@@ -1,0 +1,67 @@
+{% extends 'shipping/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group row-md-4 row-md-offset-5 align-center" style="margin-top:30px;">
+        <h2><strong>Bill Of Ladings</strong></h2>
+            {{ form }}
+        <button type="submit" class="btn mt-2 btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Get BLs
+        </button>
+    </div>
+</form>
+
+{% if selected_voyage %}
+<div class="row justify-content-around col-md-offset-5">
+    <div class="col justify-content-around m-1 p-1">
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>Vessel Name:</strong> {{ selected_voyage.vessel.name }}</h6>
+            <h6><strong>Voyage No:</strong> {{ selected_voyage.voyage_number }}</h6>
+        </div>
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>ETA: </strong> {{ selected_voyage.eta }}</h6>
+            <h6><strong>ETB: </strong> {{ selected_voyage.etb }}</h6>
+            <h6><strong>ETD: </strong> {{ selected_voyage.etd }}</h6>
+        </div>
+        <div class="row justify-content-end m-1 p-1">
+            <a href="{% url 'get-manifest' selected_voyage.slug %}">
+                <button class="btn btn-success"><i class="fa fa-download"></i>Get Manifest</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col"><strong>S.no</strong></th>
+        <th scope="col"><strong>BL</strong></th>
+        <th scope="col"><strong>Mark</strong></th>
+        <th scope="col"><strong>No. of Pkg</strong></th>
+        <th scope="col"><strong>Description</strong></th>
+        <th scope="col"><strong>Weight</strong></th>
+        <th scope="col"><strong>Shipper</strong></th>
+        <th scope="col"><strong>Consignee</strong></th>
+    </tr>
+    </thead>
+    <tbody id="service-table-body">
+        {% for c in related_bols %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <th scope="row">
+                <span>{{c.bol_number}}</span>
+            </th>
+            <td>{{c.mark}}</td>
+            <td>{{c.no_of_pkg}} Pkgs</td>
+            <td>{{c.description}}</td>
+            <td>{{c.weight}} Kgs</td>
+            <td>{{c.shipper}}</td>
+            <td>{{c.consignee}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

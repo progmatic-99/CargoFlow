@@ -12,7 +12,7 @@ pagekite.py
 .env
 .vscode
 __pycache__
-
+.python-version
 ### Django ###
 *.log
 *.pot
