@@ -5,8 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from shipping.models.vessel import Vessel
 from shipping.models.voyage import Voyage
 from shipping.models.service import Service
-from shipping.models.loose_cargo import looseCargo
-from shipping.models.container import Container
+from cargo.models.container import Container
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -18,7 +17,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         total_containers = Container.objects.count()
         context["total_containers"] = total_containers
-        context["total_loose_cargo"] = looseCargo.objects.count()
 
         context["incoming_vessels"] = Voyage.objects.filter(eta__isnull=False).count()
         context["outgoing_vessel"] = Voyage.objects.filter(etd__isnull=False).count()

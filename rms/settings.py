@@ -40,6 +40,7 @@ AUTH_USER_MODEL = "users.User"
 
 INSTALLED_APPS = [
     "shipping",
+    "cargo",
     "users",
     "cargo",
     "other",

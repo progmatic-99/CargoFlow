@@ -11,6 +11,7 @@
 <table class="table">
     <thead>
     <tr>
+        <th scope="col"><strong>SNo.</strong></th>
         <th scope="col"><strong>Voyage Number</strong></th>
         <th scope="col"><strong>Vessel</strong></th>
         <th scope="col">To Port</th>
@@ -23,6 +24,7 @@
     <tbody>
     {% for c in object_list %}
         <tr>
+            <th scope="row">{{c.id}}</th>
             <th scope="row">{{c.voyage_number}}</th>
             <td>{{c.vessel}}</td>
             <td>{{c.to_port}}</td>

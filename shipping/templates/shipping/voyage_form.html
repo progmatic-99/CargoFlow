@@ -2,6 +2,12 @@
 {% load widget_tweaks %}
 {% block content %}
 
+{% if heading %}
+<div class="form-row">
+  <h2>{{ heading }}</h2>
+</div>
+{% endif %}
+
 <form method="post">
   {% csrf_token %}
   {% for hidden in form.hidden_fields %}
@@ -13,7 +19,7 @@
   {% if field.label != 'Vessel type' %}
     {% if field.label in foreign_vessel_fields %}
       <div class="form-group col-md-4 col-md-offset-5 align-center foreign-vessel-fields" style="margin-top:30px;">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <label for="{{ field.id_for_label }}"><strong>{{ field.label }}</strong></label>
       {{ field|add_class:'form-control' }}
       {% for error in field.errors %}
         <span class="help-block">{{ error }}</span>
@@ -22,7 +28,7 @@
 
     {% else %}
       <div class="form-group col-md-4 col-md-offset-5 align-center" style="margin-top:30px;">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      <label for="{{ field.id_for_label }}"><strong>{{ field.label }}</strong></label>
       {{ field|add_class:'form-control' }}
       {% for error in field.errors %}
         <span class="help-block">{{ error }}</span>

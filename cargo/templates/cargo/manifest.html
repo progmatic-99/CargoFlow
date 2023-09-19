@@ -25,37 +25,38 @@
 <body>
   <div class="wrapper">
     <div class="container-fluid">
-      <div class="row justify-content-center"><h1><strong>Job Sheet</strong></h1></div>
+      <div class="row justify-content-center"><h1><strong>Manifest</strong></h1></div>
       <div class="row justify-content-around m-1 p-1">
-        <h6><strong>Vessel Name:</strong> {{ vessel.name }}</h6>
-        <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
       </div>
       <div class="row justify-content-around m-1 p-1">
-        <h6><strong>ETA: </strong> {{ voyage.eta }}</h6>
-        <h6><strong>ETB: </strong> {{ voyage.etb }}</h6>
-        <h6><strong>ETD: </strong> {{ voyage.etd }}</h6>
-        <h6><strong>GRT: </strong> {{ voyage.grt }}</h6>
-        <h6><strong>NRT: </strong> {{ voyage.nrt }}</h6>
       </div>
 
         <table class="table">
           <thead>
           <tr>
               <th scope="col"><strong>S.no</strong></th>
-              <th scope="col"><strong>Service Type</strong></th>
-              <th scope="col"><strong>Service Date</strong></th>
+              <th scope="col"><strong>BL</strong></th>
+              <th scope="col"><strong>Mark</strong></th>
+              <th scope="col"><strong>No. of Pkg</strong></th>
               <th scope="col"><strong>Description</strong></th>
+              <th scope="col"><strong>Weight</strong></th>
+              <th scope="col"><strong>Shipper</strong></th>
+              <th scope="col"><strong>Consignee</strong></th>
           </tr>
           </thead>
           <tbody id="service-table-body">
-              {% for c in related_services %}
+              {% for c in related_bols %}
               <tr>
                   <td>{{ c.id }}</td>
                   <th scope="row">
-                      <span>{{c.service_type.name}}</span>
+                      <span>{{c.bol_number}}</span>
                   </th>
-                  <td>{{c.service_date}}</td>
+                  <td>{{c.mark}}</td>
+                  <td>{{c.no_of_pkg}} Pkgs</td>
                   <td>{{c.description}}</td>
+                  <td>{{c.weight}} Kgs</td>
+                  <td>{{c.shipper}}</td>
+                  <td>{{c.consignee}}</td>
               </tr>
               {% endfor %}
           </tbody>

@@ -2,69 +2,79 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import HttpResponse, redirect
-from django.template.loader import render_to_string
-import weasyprint
+from django.shortcuts import redirect
 
+from utils.create_pdf import create_pdf
 from shipping.models.service import Service
-from shipping.models.vessel import Vessel
 from shipping.models.voyage import Voyage
 from shipping.forms import (
+    ServiceForm,
     ServiceCreateForm,
-    VesselSelectionServiceForm,
+    VoyageSelectionForm,
     ServiceCreateFormSet,
 )
-from rms.settings import BASE_DIR
 
 
 class ServiceCreate(LoginRequiredMixin, CreateView):
-    # permission_required = "gobasic.add_customer"
     login_url = "/login/"
     login_required = True
-    redirect_field_name = "index"
-    model = Service
     form_class = ServiceCreateForm
     template_name = "shipping/formset.html"
+    heading = "Job Sheet"
+    button_heading = "Add Service"
+    table_headings = [
+        "Service Type",
+        "Service Date",
+        "Description",
+        "Completed",
+    ]
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["heading"] = "Service Registration"
-        context["button_heading"] = "Add Service"
-        context["table_headings"] = [
-            "Vessel",
-            "Voyage",
-            "Service Type",
-            "Service Date",
-            "Description",
-            "Completed",
-        ]
-        context["formset"] = ServiceCreateFormSet(
+        ctx = super().get_context_data(**kwargs)
+        ctx["heading"] = self.heading
+        ctx["button_heading"] = self.button_heading
+        ctx["table_headings"] = self.table_headings
+        ctx["constant_form"] = VoyageSelectionForm()
+        ctx["formset"] = ServiceCreateFormSet(
             queryset=Service.objects.none(),
         )
-        return context
+        return ctx
 
     def post(self, request, *args, **kwargs):
-        formset = ServiceCreateFormSet(data=request.POST)
+        voyage_number = request.POST.get("voyages")
+        voyage = Voyage.objects.filter(voyage_number=voyage_number).first()
+        data = {key: request.POST[key] for key in request.POST if key != "voyages"}
 
-        for form in formset:
-            if form.is_valid():
-                form.save()
-            else:
-                return self.render_to_response({"formset": formset})
+        formset = ServiceCreateFormSet(data=data)
+
+        if formset.is_valid():
+            for form in formset:
+                if form.is_valid():
+                    instance = form.save(commit=False)
+                    instance.voyage = voyage
+                    instance.save()
+        else:
+            ctx = {}
+            ctx["heading"] = self.heading
+            ctx["button_heading"] = self.button_heading
+            ctx["table_headings"] = self.table_headings
+            ctx["constant_form"] = VoyageSelectionForm()
+            ctx["formset"] = formset
+            return self.render_to_response(ctx)
 
         return redirect(reverse_lazy("service-list"))
 
 
 class ServiceList(FormView):
     template_name = "shipping/service_list.html"
-    form_class = VesselSelectionServiceForm
     success_url = reverse_lazy("service-list")
+    form_class = VoyageSelectionForm
 
     def form_valid(self, form):
-        selected_voyage = Voyage.objects.filter(name=form.cleaned_data["name"]).first()
-        related_services = Service.objects.filter(voyage=selected_voyage).order_by(
-            "-service_date"
-        )
+        selected_voyage = Voyage.objects.filter(
+            voyage_number=form.cleaned_data["voyages"]
+        ).first()
+        related_services = Service.objects.services_for_vessel(voyage=selected_voyage)
         context = self.get_context_data(
             form=form,
             selected_voyage=selected_voyage,
@@ -72,22 +82,13 @@ class ServiceList(FormView):
         )
         return self.render_to_response(context)
 
-    def form_invalid(self, form):
-        context = self.get_context_data(form=form)
-        return self.render_to_response(context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["voyages"] = Voyage.objects.all()
-        return context
-
 
 class ServiceEdit(LoginRequiredMixin, UpdateView):
     # permission_required = "gobasic.change_customer"
     login_url = "/login/"
     redirect_field_name = "index"
     model = Service
-    form_class = ServiceCreateForm
+    form_class = ServiceForm
     template_name = "shipping/create_form.html"
 
 
@@ -101,7 +102,10 @@ class ServiceDelete(LoginRequiredMixin, DeleteView):
 
 
 class DeliveryChallan(LoginRequiredMixin, ListView):
-    pass
+    template_name = "shipping/pdf/delivery_challan.html"
+
+    def get(self, request, slug):
+        ...
 
 
 class JobSheetPdf(LoginRequiredMixin, ListView):
@@ -110,31 +114,15 @@ class JobSheetPdf(LoginRequiredMixin, ListView):
     def get(self, request, slug):
         voyage = Voyage.objects.filter(slug=slug).first()
 
-        # write logic for what if voyage doesn't exist
-        if voyage:
-            vessel = voyage.vessel
+        related_services = Service.objects.filter(voyage=voyage).order_by(
+            "-service_date"
+        )
 
-            related_services = Service.objects.filter(vessel=vessel).order_by(
-                "-service_date"
-            )
-            ctx = {
-                "voyage": voyage,
-                "vessel": vessel,
-                "related_services": related_services,
-            }
-            html_content = render_to_string(self.template_name, ctx).encode("utf-8")
+        filename = f"{voyage.voyage_number}-job-sheet.pdf"
+        ctx = {
+            "voyage": voyage,
+            "vessel": voyage.vessel,
+            "related_services": related_services,
+        }
 
-            response = HttpResponse(content_type="application/pdf")
-            response[
-                "Content-Disposition"
-            ] = f'attachment; filename="{voyage.voyage_number}-job-sheet.pdf"'
-            weasyprint.HTML(string=html_content).write_pdf(
-                response,
-                stylesheets=[
-                    weasyprint.CSS(
-                        f"{BASE_DIR}/shipping/static/shipping/css/sb-admin-2.min.css"
-                    )
-                ],
-            )
-
-            return response
+        return create_pdf(filename, ctx, self.template_name)

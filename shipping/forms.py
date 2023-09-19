@@ -1,30 +1,17 @@
-from .models.service import Service
-from .models.service_type import ServiceType
-from .models.vessel import Vessel
-from .models.consignee import Consignee
-from .models.shipper import Shipper
-from .models.company import Company
-from .models.container import Container
-from .models.sof import SOF
-from .models.voyage import Voyage
+from shipping.models.service import Service
+from shipping.models.service_type import ServiceType
+from shipping.models.vessel import Vessel
+from shipping.models.company import Company
+from shipping.models.sof import SOF
+from shipping.models.voyage import Voyage
 
 from django import forms
 
 
-class ServiceCreateForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.empty_permitted = True
-
-        # Remove labels from the fields
-        for field_name, field in self.fields.items():
-            field.label = ""
-
+class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = [
-            "vessel",
-            "voyage",
             "service_type",
             "service_date",
             "description",
@@ -34,6 +21,17 @@ class ServiceCreateForm(forms.ModelForm):
             "service_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "service_type": forms.Select(),
         }
+
+
+class ServiceCreateForm(ServiceForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.empty_permitted = True
+
+        # Remove labels from the fields
+        for field_name, field in self.fields.items():
+            field.label = ""
+            field.widget.attrs["class"] = "form-control"
 
 
 ServiceCreateFormSet = forms.modelformset_factory(
@@ -50,10 +48,11 @@ class ServiceTypeCreateForm(forms.ModelForm):
 
         for field_name, field in self.fields.items():
             field.label = ""
+            field.widget.attrs["class"] = "form-control"
 
     class Meta:
         model = ServiceType
-        fields = ["name", "company", "price_per_tonnage", "description"]
+        fields = ["name", "price_per_tonnage", "description"]
 
 
 ServiceTypeCreateFormSet = forms.modelformset_factory(
@@ -64,10 +63,29 @@ ServiceTypeCreateFormSet = forms.modelformset_factory(
 )
 
 
-class VesselSelectionServiceForm(forms.ModelForm):
-    class Meta:
-        model = Voyage
-        exclude = ["all"]
+class VoyageSelectionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        choices = []
+        for obj in Voyage.objects.all():
+            number = obj.voyage_number
+            name = obj.__str__()
+            choices.append((number, name))
+            self.fields["voyages"].choices = choices
+
+    voyages = forms.ChoiceField(label="Select a Voyage", choices=(), required=True)
+
+
+class CompanySelectionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        choices = []
+        for obj in Company.objects.all():
+            name = obj.name
+            choices.append((name, name))
+            self.fields["company"].choices = choices
+
+    company = forms.ChoiceField(label="Select a Company", choices=(), required=True)
 
 
 class VesselCreateForm(forms.ModelForm):
@@ -96,42 +114,11 @@ class VoyageCreateForm(forms.ModelForm):
             "cha_boe": "CHA BOE",
             "import_no": "Import No",
             "export_no": "Export No",
+            "pi_club": "PI Club",
+            "agent_importer": "Agent Importer",
+            "purpose_of_call": "Purpose of Call",
+            "charter_type": "Charter Type",
         }
-        fields = [
-            "voyage_number",
-            "vessel",
-            "to_port",
-            "next_port_of_call",
-            "last_port_of_call",
-            "master_name",
-            "eta",
-            "etb",
-            "etd",
-            "grt",
-            "nrt",
-            "draft",
-            "owner",
-            "pi_club",
-            "purpose_of_call",
-            "import_no",
-            "export_no",
-            "cha_boe",
-            "agent_importer",
-            "remarks",
-            "vessel_on_port",
-            "vessel_on_anchorage",
-        ]
-
-
-class ConsigneeCreateForm(forms.ModelForm):
-    class Meta:
-        model = Consignee
-        fields = "__all__"
-
-
-class ShipperCreateForm(forms.ModelForm):
-    class Meta:
-        model = Shipper
         fields = "__all__"
 
 
@@ -140,12 +127,6 @@ class CompanyCreateForm(forms.ModelForm):
         model = Company
         fields = "__all__"
         labels = {"ifsc_code": "IFSC Code"}
-
-
-class ContainerCreateForm(forms.ModelForm):
-    class Meta:
-        model = Container
-        fields = "__all__"
 
 
 class SOFCreateForm(forms.ModelForm):
