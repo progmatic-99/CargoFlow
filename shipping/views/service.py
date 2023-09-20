@@ -114,9 +114,7 @@ class JobSheetPdf(LoginRequiredMixin, ListView):
     def get(self, request, slug):
         voyage = Voyage.objects.filter(slug=slug).first()
 
-        related_services = Service.objects.filter(voyage=voyage).order_by(
-            "-service_date"
-        )
+        related_services = Service.objects.filter(voyage=voyage)
 
         filename = f"{voyage.voyage_number}-job-sheet.pdf"
         ctx = {

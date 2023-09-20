@@ -47,17 +47,6 @@
         </a>
 
         <!-- Divider -->
-        <hr class="sidebar-divider my-0" />
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'index' %}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Home</span></a
-          >
-        </li>
-
-        <!-- Divider -->
         <hr class="sidebar-divider" />
 
         <!-- Heading -->
@@ -128,6 +117,8 @@
               <a class="collapse-item" href="{% url 'bol-create' %}">Bill of Lading</a>
               <a class="collapse-item" href="{% url 'container-list' %}">Container List</a>
               <a class="collapse-item" href="{% url 'bol-list' %}">BOL list</a>
+              <a class="collapse-item" href="{% url 'delivery-order-list' %}">Delivery Orders</a>
+              <a class="collapse-item" href="{% url 'vendor-list' %}">Vendor List</a>
             </div>
           </div>
         </li>

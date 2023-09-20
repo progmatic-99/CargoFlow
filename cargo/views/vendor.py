@@ -19,12 +19,11 @@ class VendorList(LoginRequiredMixin, ListView):
     redirect_field_name = "index"
     login_required = True
     model = Vendor
-    template_name = "shipping/vendor_list.html"
+    template_name = "cargo/vendor_list.html"
     paginate_by = 10
 
 
 class VendorEdit(LoginRequiredMixin, UpdateView):
-    # permission_required = "gobasic.change_customer"
     login_url = "/login/"
     redirect_field_name = "index"
     model = Vendor
@@ -33,7 +32,6 @@ class VendorEdit(LoginRequiredMixin, UpdateView):
 
 
 class VendorDelete(LoginRequiredMixin, DeleteView):
-    # permission_required = "gobasic.delete_customer"
     login_url = "/login/"
     redirect_field_name = "index"
     model = Vendor

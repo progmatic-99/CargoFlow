@@ -16,7 +16,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context["total_vessels"] = Vessel.objects.count()
 
         total_containers = Container.objects.count()
+        loaded_containers = Container.objects.filter(stuffed=True).count()
+        empty_containers = total_containers - loaded_containers
         context["total_containers"] = total_containers
+        context["loaded_containers"] = loaded_containers
+        context["empty_containers"] = empty_containers
 
         context["incoming_vessels"] = Voyage.objects.filter(eta__isnull=False).count()
         context["outgoing_vessel"] = Voyage.objects.filter(etd__isnull=False).count()
