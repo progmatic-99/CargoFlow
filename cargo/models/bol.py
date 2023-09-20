@@ -2,6 +2,7 @@ from django.db import models
 from django_extensions.db.fields import AutoSlugField
 
 from shipping.models.voyage import Voyage
+from cargo.models.container import Container
 
 
 class BillOfLading(models.Model):
@@ -20,3 +21,8 @@ class BillOfLading(models.Model):
 
     def __str__(self):
         return f"{self.bol_number} - ({self.voyage.voyage_number})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        Container.objects.create(container_number=self.mark, voyage=self.voyage)
