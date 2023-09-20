@@ -1,6 +1,6 @@
-from cargo.models.container import Container
 from cargo.models.bol import BillOfLading
 from cargo.models.vendor import Vendor
+from cargo.models.container import Container
 from shipping.forms import VoyageSelectionForm
 
 from django import forms
@@ -9,10 +9,17 @@ from django import forms
 TYPE = [(1, "IMPORT"), (2, "EXPORT")]
 
 
-class ContainerCreateForm(forms.ModelForm):
+class ContainerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["container_number"].disabled = True
+
     class Meta:
         model = Container
-        fields = "__all__"
+        fields = ["container_number", "stuffed", "destuffed"]
+
+
+ContainerFormSet = forms.modelformset_factory(Container, form=ContainerForm, extra=0)
 
 
 class VendorCreateForm(forms.ModelForm):

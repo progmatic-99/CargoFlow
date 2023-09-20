@@ -15,4 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 
-urlpatterns = [path("", include("shipping.urls")), path("", include("cargo.urls"))]
+urlpatterns = [
+    path("", include("shipping.urls")),
+    path("", include("cargo.urls")),
+]
