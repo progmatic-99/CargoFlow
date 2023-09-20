@@ -8,6 +8,7 @@ from .views.bol import (
 )
 from .views.vendor import VendorCreate, VendorDelete, VendorEdit, VendorList
 from .views.manifest import ManifestPDF
+from .views.delivery_order import DeliveryOrderList, DeliveryOrderPdf
 
 
 urlpatterns = [
@@ -34,4 +35,11 @@ urlpatterns = [
     ),
     # manifest pdf
     path("manifest/get/<slug:slug>", ManifestPDF.as_view(), name="get-manifest"),
+    # delivery order
+    path("do/list", DeliveryOrderList.as_view(), name="delivery-order-list"),
+    path(
+        "do/pdf/<str:consignee>",
+        DeliveryOrderPdf.as_view(),
+        name="delivery-order-pdf",
+    ),
 ]

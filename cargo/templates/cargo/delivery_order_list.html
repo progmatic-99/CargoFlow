@@ -1,0 +1,45 @@
+{% extends 'shipping/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group row-md-4 row-md-offset-5 align-center" style="margin-top:30px;">
+        <h2><strong>Delivery Order</strong></h2>
+            {{ form }}
+        <button type="submit" class="btn mt-2 btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Get Delivery Orders
+        </button>
+    </div>
+</form>
+
+{% if selected_voyage %}
+<div class="row justify-content-around col-md-offset-5">
+    <div class="col justify-content-around m-1 p-1">
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>Vessel Name:</strong> {{ selected_voyage.vessel.name }}</h6>
+            <h6><strong>Voyage No:</strong> {{ selected_voyage.voyage_number }}</h6>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col"><strong>Consignee</strong></th>
+        <th scope="col"><strong>Download</strong></th>
+    </tr>
+    </thead>
+    <tbody id="service-table-body">
+        {% for c in bols %}
+        <tr>
+            <th scope="row">
+                <span>{{c.consignee}}</span>
+            </th>
+            <td><a href="{% url 'delivery-order-pdf' c.consignee %}"><button class="btn"><i class="fa fa-download"></i></button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
