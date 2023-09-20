@@ -40,7 +40,6 @@ AUTH_USER_MODEL = "users.User"
 
 INSTALLED_APPS = [
     "shipping",
-    "cargo",
     "users",
     "other",
     "django.contrib.admin",
