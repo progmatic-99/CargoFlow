@@ -41,7 +41,13 @@
         {% endfor %}
         {% for field in form.visible_fields %}
         <td>
+            {% if field.label == 'Stuffed' %}
+            {{ field|add_class:'form-control checkbox-stuffed' }}
+            {% elif field.label == 'Destuffed' %}
+            {{ field|add_class:'form-control checkbox-destuffed' }}
+            {% else %}
             {{ field|add_class:'form-control' }}
+            {% endif %}
             {% for error in field.errors %}
             <span class="help-block">{{ error }}</span>
             {% endfor %}
@@ -68,5 +74,26 @@
 </div>
 </form>
 {% endif %}
+
+<script>
+    const stuffedCheckbxs = document.querySelectorAll(".checkbox-stuffed");
+    const destuffedCheckbxs = document.querySelectorAll(".checkbox-destuffed");
+
+    stuffedCheckbxs.forEach((checkbox, index) => {
+        checkbox.addEventListener("change", function() {
+            if (this.checked) {
+                destuffedCheckbxs[index].checked = false;
+            }
+        })
+    })
+
+    destuffedCheckbxs.forEach((checkbox, index) => {
+        checkbox.addEventListener("change", function() {
+            if (this.checked) {
+                stuffedCheckbxs[index].checked = false;
+            }
+        })
+    })
+</script>
 
 {% endblock %}

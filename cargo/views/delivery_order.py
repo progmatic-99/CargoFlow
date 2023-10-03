@@ -34,9 +34,8 @@ class DeliveryOrderPdf(LoginRequiredMixin, ListView):
         bols = BillOfLading.objects.filter(consignee=consignee).all()
 
         voyage = bols[0].voyage
-        print(voyage)
 
-        filename = f"{consignee}-delivery-order.pdf"
+        filename = f"{consignee}-Delivery-Order.pdf"
         ctx = {
             "bols": bols,
             "voyage": voyage,
