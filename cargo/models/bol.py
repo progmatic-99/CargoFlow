@@ -24,5 +24,10 @@ class BillOfLading(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        stuffed = False
+        if self.bol_type == "2":
+            stuffed = True
 
-        Container.objects.create(container_number=self.mark, voyage=self.voyage)
+        Container.objects.create(
+            container_number=self.mark, voyage=self.voyage, stuffed=stuffed
+        )
