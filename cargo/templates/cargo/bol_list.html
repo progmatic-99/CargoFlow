@@ -43,6 +43,7 @@
         <th scope="col"><strong>Weight</strong></th>
         <th scope="col"><strong>Shipper</strong></th>
         <th scope="col"><strong>Consignee</strong></th>
+        <th scope="col"><strong>Edit</strong></th>
     </tr>
     </thead>
     <tbody id="service-table-body">
@@ -58,6 +59,7 @@
             <td>{{c.weight}} Kgs</td>
             <td>{{c.shipper}}</td>
             <td>{{c.consignee}}</td>
+            <td><a href="{% url 'bol-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
         {% endfor %}
     </tbody>
