@@ -10,7 +10,8 @@ class BillOfLading(models.Model):
     bol_type = models.CharField(max_length=10)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     bol_number = models.IntegerField()
-    mark = models.CharField(max_length=50)
+    loose_cargo = models.BooleanField(default=False)
+    mark = models.CharField(max_length=50, null=True)
     no_of_pkg = models.IntegerField()
     weight = models.FloatField()
     consignee = models.CharField(max_length=150)
@@ -24,10 +25,12 @@ class BillOfLading(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        stuffed = False
-        if self.bol_type == "2":
-            stuffed = True
 
-        Container.objects.create(
-            container_number=self.mark, voyage=self.voyage, stuffed=stuffed
-        )
+        if not self.loose_cargo:
+            stuffed = False
+            if self.bol_type == "1":
+                stuffed = True
+
+            Container.objects.create(
+                container_number=self.mark, voyage=self.voyage, stuffed=stuffed
+            )
