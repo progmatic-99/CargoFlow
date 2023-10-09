@@ -1,10 +1,16 @@
 from django.urls import path
-from .views.container import ContainerList, ContainerEdit
+from .views.container import (
+    ContainerList,
+    ContainerEdit,
+    ContainerReport,
+    ContainerBulkEdit,
+)
 from .views.bol import (
     BillOfLadingCreate,
     BillOfLadingList,
     BillOfLadingEdit,
     BillOfLadingDelete,
+    BillOfLadingDownload,
 )
 from .views.vendor import VendorCreate, VendorDelete, VendorEdit, VendorList
 from .views.manifest import ManifestPDF
@@ -15,6 +21,10 @@ urlpatterns = [
     # container views
     path("container/list", ContainerList.as_view(), name="container-list"),
     path("container/edit", ContainerEdit.as_view(), name="container-edit"),
+    path("container/report", ContainerReport.as_view(), name="container-report"),
+    path(
+        "container/bulk/edit", ContainerBulkEdit.as_view(), name="container-bulk-edit"
+    ),
     # bol views
     path("bol/create", BillOfLadingCreate.as_view(), name="bol-create"),
     path("bol/list", BillOfLadingList.as_view(), name="bol-list"),
@@ -41,5 +51,8 @@ urlpatterns = [
         "do/pdf/<str:consignee>",
         DeliveryOrderPdf.as_view(),
         name="delivery-order-pdf",
+    ),
+    path(
+        "bol/download/<slug:slug>", BillOfLadingDownload.as_view(), name="download-bol"
     ),
 ]

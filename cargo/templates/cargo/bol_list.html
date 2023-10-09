@@ -32,10 +32,20 @@
     </div>
 </div>
 
+<form method="POST" action="{% url 'download-bol' selected_voyage.slug %}">
+{{formset.management_form}}
+{% csrf_token %}
+<div class="row justify-content-start m-1 p-1">
+    <a href="{% url 'download-bol' selected_voyage.slug %}">
+        <button class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+    </a>
+</div>
 <table class="table">
     <thead>
     <tr>
-        <th scope="col"><strong>S.no</strong></th>
+        <th scope="col"><strong>
+            <input class="form-control parent" type="checkbox" name="all" value="1"></input>
+        </strong></th>
         <th scope="col"><strong>BL</strong></th>
         <th scope="col"><strong>Mark</strong></th>
         <th scope="col"><strong>No. of Pkg</strong></th>
@@ -49,7 +59,9 @@
     <tbody id="service-table-body">
         {% for c in related_bols %}
         <tr>
-            <td>{{ c.id }}</td>
+            <td>
+                <input type="checkbox" name={{c.bol_number}} value={{c.slug}} class="form-control child"></input>
+            </td>
             <th scope="row">
                 <span>{{c.bol_number}}</span>
             </th>
@@ -64,6 +76,27 @@
         {% endfor %}
     </tbody>
 </table>
+</form>
+<script>
+    const parent = document.querySelector(".parent");
+    const children = document.querySelectorAll(".child");
+
+    parent.addEventListener('change', () => {
+        const isChecked = parent.checked;
+
+        children.forEach(child => {
+            child.checked = isChecked;
+        })
+    })
+
+    children.forEach(child => {
+        child.addEventListener('change', () => {
+            if (!child.checked) {
+                parent.checked = false;
+            }
+        })
+    })
+</script>
 {% endif %}
 
 {% endblock %}

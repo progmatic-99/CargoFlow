@@ -16,7 +16,7 @@ class ContainerForm(forms.ModelForm):
 
     class Meta:
         model = Container
-        fields = ["container_number", "stuffed", "destuffed"]
+        fields = ["container_number", "stuffed"]
 
 
 ContainerFormSet = forms.modelformset_factory(Container, form=ContainerForm, extra=0)
@@ -33,6 +33,10 @@ class BOLForm(forms.ModelForm):
     class Meta:
         model = BillOfLading
         exclude = ["voyage", "bol_type"]
+
+
+class BOLListForm(forms.Form):
+    select = forms.BooleanField()
 
 
 class BOLCreateForm(BOLForm):

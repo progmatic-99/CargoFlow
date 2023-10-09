@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     ".ngrok-free.app",
 ]
 
-ngrok_url = "https://fb39-2405-201-19-40ae-d73-3eda-d94b-c165.ngrok-free.app"
+ngrok_url = ""
 
 
 AUTH_USER_MODEL = "users.User"

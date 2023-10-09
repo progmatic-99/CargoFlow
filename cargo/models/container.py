@@ -10,7 +10,6 @@ class Container(models.Model):
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     container_number = models.CharField(max_length=20)
     stuffed = models.BooleanField(default=True)
-    destuffed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.container_number
