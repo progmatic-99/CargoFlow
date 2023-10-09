@@ -1,0 +1,70 @@
+{% extends 'shipping/base.html' %}
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
+</div>
+
+{% if object_list %}
+<form method="POST" action="{% url 'container-bulk-edit' %}">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"><strong>Container No</strong></th>
+                <th scope="col"><strong>Container Status</strong></th>
+                <th scope="col"><strong>Stuffed</strong></th>
+            </tr>
+        </thead>
+        <tbody id="formset">
+            {% for c in object_list %}
+            <tr class="formset-form">
+                <td>{{c.container_number}}</td>
+                <td>{{c.container_status.prev_status}} -> {{c.container_status.curr_status}}</td>
+                <td><input type="checkbox" class="form-control" checked={{c.stuffed}} ></input></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="mt-5 row justify-content-around">
+        <div class="form-group col-md-4 col-md-offset-5 align-center">
+            <a href="{% url 'container-bulk-edit' %}">
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span> Save
+                </button>
+            </a>
+            <a href="{% url 'index' %}">
+                <button type="button" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span> Cancel
+                </button>
+            </a>
+        </div>
+    </div>
+</form>
+{% else %}
+    <p>No Entries Detected Yet !</p>
+{% endif %}
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    
+</div>
+
+
+{% endblock %}
