@@ -63,7 +63,7 @@
             aria-controls="collapseTwo"
           >
             <i class="fas fa-fw fa-anchor"></i>
-            <span>Shipping</span>
+            <span>Master</span>
           </a>
           <div
             id="collapseTwo"
@@ -77,16 +77,40 @@
                 >Create Vessel</a>
               <a class="collapse-item" href="{% url 'voyage-create' %}"
                 >Create Voyage</a>
-              <a class="collapse-item" href="{% url 'service-create' %}"
-                >Create Job Sheet</a>
-              <a class="collapse-item" href="{% url 'service-type-create' %}"
-                >Create Service Type</a>
-              <a class="collapse-item" href="{% url 'service-list' %}">Service Report</a>
-              <a class="collapse-item" href="{% url 'vessel-list' %}">Vessels List</a>
-              <a class="collapse-item" href="{% url 'voyage-list' %}">Voyages List</a>
             </div>
           </div>
         </li>
+
+
+       <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#collapseShipping"
+              aria-expanded="true"
+              aria-controls="collapseShipping"
+          >
+              <i class="fas fa-fw fa-anchor"></i>
+              <span>Shipping</span>
+          </a>
+          <div
+              id="collapseShipping"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+          >
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="{% url 'service-create' %}">Create Job Sheet</a>
+                  <a class="collapse-item" href="{% url 'service-type-create' %}">Create Service Type</a>
+                  <a class="collapse-item" href="{% url 'service-list' %}">Service Report</a>
+                  <a class="collapse-item" href="{% url 'vessel-list' %}">Vessels List</a>
+                  <a class="collapse-item" href="{% url 'voyage-list' %}">Voyages List</a>
+              </div>
+          </div>
+        </li>
+
 
         <li class="nav-item">
           <a
@@ -118,28 +142,7 @@
           </div>
         </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link collapsed"
-            href="#"
-            data-toggle="collapse"
-            data-target="#collapseOtherUtilities"
-            aria-expanded="true"
-            aria-controls="collapseOtherUtilities"
-          >
-            <i class="fas fal fa-tools"></i>
-            <span>Others</span>
-          </a>
-          <div
-            id="collapseOtherUtilities"
-            class="collapse"
-            aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar"
-          >
-            <div class="bg-white py-2 collapse-inner rounded">
-            </div>
-          </div>
-        </li>
+        
         <!-- Divider -->
         <hr class="sidebar-divider" />
 
