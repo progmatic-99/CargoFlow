@@ -42,7 +42,7 @@
         <td>
             {{ field|add_class:'form-control' }}
             {% for error in field.errors %}
-            <span class="help-block">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </td>
         {% endfor %}
