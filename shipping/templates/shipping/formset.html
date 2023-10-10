@@ -4,7 +4,7 @@
 
 <div class="form-row justify-content-between">
   <h3>{{ heading }}</h3>
-  <button type="button" id="add-form" class="btn btn-info">
+  <button type="button" class="add-form btn btn-info">
     <span class="glyphicon glyphicon-ok"></span>{{ button_heading }}
   </button>
 </div>
@@ -63,13 +63,19 @@
       </a>
     </div>
   </div>
+  <div class="form-row m-1 justify-content-end">
+    <button type="button" class="add-form btn btn-info">
+      <span class="glyphicon glyphicon-ok"></span>{{ button_heading }}
+    </button>
+  </div>
 </form>
 
 <script type="text/javascript">
-    const addButton = document.getElementById('add-form');
+    const addButton = document.querySelectorAll('.add-form');
     const formsetDiv = document.getElementById('formset');
 
-    addButton.addEventListener('click', function() {
+    addButton.forEach((btn) => {
+      btn.addEventListener('click', function() {
         const formCount = formsetDiv.querySelectorAll(".formset-form").length;
         let newForm = document.createElement('tr');
         let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
@@ -82,6 +88,7 @@
         totalForms.setAttribute('value', `${formCount+1}`)
         formsetDiv.appendChild(newForm);
       });
+    })
 </script>
 
 {% endblock %}
