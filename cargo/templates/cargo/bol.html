@@ -27,8 +27,16 @@
     <div class="container-fluid">
       <div class="row justify-content-center"><h3><strong>Bill of Lading for {{ voyage }}</strong></h3></div>
       <div class="row justify-content-around m-1 p-1">
+        <h6><strong>ETA: </strong> {{ voyage.eta }}</h6>
+        <h6><strong>ETB: </strong> {{ voyage.etb }}</h6>
+        <h6><strong>ETD: </strong> {{ voyage.etd }}</h6>
       </div>
       <div class="row justify-content-around m-1 p-1">
+        <h6><strong>Vessel Name:</strong> {{ voyage.vessel.name }}</h6>
+        <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
+        <h6><strong>Master:</strong> {{ voyage.master_name }}</h6>
+        <h6><strong>Next Port of Call:</strong> {{ voyage.next_port_of_call }}</h6>
+        <h6><strong>Last Port of Call:</strong> {{ voyage.last_port_of_call }}</h6>
       </div>
 
         <table class="table">
