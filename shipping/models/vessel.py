@@ -29,6 +29,8 @@ class Vessel(models.Model):
     loa = models.FloatField()
     beam = models.FloatField()
     depth = models.FloatField()
+    grt = models.FloatField()
+    nrt = models.FloatField()
 
     def __str__(self):
         return f"{self.name}-{self.vessel_type}"

@@ -92,7 +92,14 @@ class VesselCreateForm(forms.ModelForm):
     class Meta:
         model = Vessel
         fields = "__all__"
-        labels = {"loa": "LOA", "beam": "BEAM", "mmsi": "MMSI", "imo_number": "IMO No"}
+        labels = {
+            "loa": "LOA",
+            "beam": "BEAM",
+            "mmsi": "MMSI",
+            "imo_number": "IMO No",
+            "grt": "GRT",
+            "nrt": "NRT",
+        }
 
 
 class VoyageCreateForm(forms.ModelForm):
@@ -109,8 +116,6 @@ class VoyageCreateForm(forms.ModelForm):
             "etd": "ETD",
             "eta": "ETA",
             "etb": "ETB",
-            "grt": "GRT",
-            "nrt": "NRT",
             "cha_boe": "CHA BOE",
             "import_no": "Import No",
             "export_no": "Export No",

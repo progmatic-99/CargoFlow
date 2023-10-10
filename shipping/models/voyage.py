@@ -15,8 +15,6 @@ class Voyage(models.Model):
     eta = models.DateTimeField(null=True, blank=True)
     etb = models.DateTimeField(null=True, blank=True)
     etd = models.DateTimeField(null=True, blank=True)
-    grt = models.FloatField()
-    nrt = models.FloatField()
     draft = models.CharField(max_length=200)
     owner = models.CharField(max_length=200)
     master_name = models.CharField(max_length=200)
