@@ -131,13 +131,8 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              
               <a class="collapse-item" href="{% url 'bol-create' %}">Bill of Lading</a>
-              
-              <a class="collapse-item" href="{% url 'container-report' %}">Container List</a>
-              
-              
-              
+              <a class="collapse-item" href="{% url 'container-list' %}">Container List</a>
             </div>
           </div>
         </li>
@@ -163,16 +158,13 @@
             <div class="bg-white py-2 collapse-inner rounded">
               <a class="collapse-item" href="{% url 'bol-list' %}">Manifest Reports</a>
               <a class="collapse-item" href="{% url 'service-list' %}">Service Report</a>
-              <a class="collapse-item" href="{% url 'container-list' %}">Container Report</a>
-              <a class="collapse-item" href="{% url 'delivery-order-list' %}">Delivery Orders/Gate Pass</a>
-
+              <a class="collapse-item" href="{% url 'container-report' %}">Container Report</a>
+              <a class="collapse-item" href="{% url 'delivery-order-list' %}">Delivery Orders</a>
             </div>
           </div>
         </li>
         <!-- Divider -->
         <hr class="sidebar-divider" />
-
-        
 
         <!-- Nav Item - Logout -->
         <li class="nav-item">
