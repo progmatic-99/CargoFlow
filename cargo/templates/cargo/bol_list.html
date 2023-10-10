@@ -40,7 +40,7 @@
 {% csrf_token %}
 <div class="row justify-content-start m-1 p-1">
     <a href="{% url 'download-bol' selected_voyage.slug %}">
-        <button class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-download"></i> Download</button>
     </a>
 </div>
 <table class="table">
@@ -74,13 +74,13 @@
             <td>{{c.weight}} Kgs</td>
             <td>{{c.shipper}}</td>
             <td>{{c.consignee}}</td>
-            <td><a href="{% url 'bol-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{% url 'bol-edit' c.slug %}"><button type="button" class="btn">🖋️</button></a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 </form>
-<script>
+<script type="text/javascript">
     const parent = document.querySelector(".parent");
     const children = document.querySelectorAll(".child");
 
