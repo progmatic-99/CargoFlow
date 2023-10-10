@@ -62,7 +62,8 @@
             aria-expanded="true"
             aria-controls="collapseTwo"
           >
-            <i class="fas fa-brain"></i>
+          <i class="fas fa-user-cog"></i>
+
             <span>Master</span>
           </a>
           <div
@@ -73,10 +74,9 @@
           >
             <div class="bg-white py-2 collapse-inner rounded">
               <a class="collapse-item" href="{% url 'company-create' %}">Create Company</a>
-              <a class="collapse-item" href="{% url 'vessel-create' %}"
-                >Create Vessel</a>
-              <a class="collapse-item" href="{% url 'voyage-create' %}"
-                >Create Voyage</a>
+              <a class="collapse-item" href="{% url 'vessel-create' %}">Create Vessel</a>
+              <a class="collapse-item" href="{% url 'voyage-create' %}">Create Voyage</a>
+              <a class="collapse-item" href="{% url 'vendor-create' %}">Create Vendor</a>  
             </div>
           </div>
         </li>
@@ -102,9 +102,9 @@
               data-parent="#accordionSidebar"
           >
               <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="{% url 'service-type-create' %}">Create Service Type</a>  
                   <a class="collapse-item" href="{% url 'service-create' %}">Create Job Sheet</a>
-                  <a class="collapse-item" href="{% url 'service-type-create' %}">Create Service Type</a>
-                  <a class="collapse-item" href="{% url 'service-list' %}">Service Report</a>
+                  
                   <a class="collapse-item" href="{% url 'vessel-list' %}">Vessels List</a>
                   <a class="collapse-item" href="{% url 'voyage-list' %}">Voyages List</a>
               </div>
@@ -131,49 +131,48 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="{% url 'vendor-create' %}">Vendor</a>
+              
               <a class="collapse-item" href="{% url 'bol-create' %}">Bill of Lading</a>
-              <a class="collapse-item" href="{% url 'container-list' %}">Container List</a>
-              <a class="collapse-item" href="{% url 'container-report' %}">Container Report</a>
-              <a class="collapse-item" href="{% url 'bol-list' %}">BOL list</a>
-              <a class="collapse-item" href="{% url 'delivery-order-list' %}">Delivery Orders</a>
-              <a class="collapse-item" href="{% url 'vendor-list' %}">Vendor List</a>
+              
+              <a class="collapse-item" href="{% url 'container-report' %}">Container List</a>
+              
+              
+              
             </div>
           </div>
         </li>
 
-        
+        <li class="nav-item">
+          <a
+            class="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapsereports"
+            aria-expanded="true"
+            aria-controls="collapsereports"
+          >
+          <i class="fas fa-file-alt"></i>
+            <span>Reports</span>
+          </a>
+          <div
+            id="collapsereports"
+            class="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item" href="{% url 'bol-list' %}">Manifest Reports</a>
+              <a class="collapse-item" href="{% url 'service-list' %}">Service Report</a>
+              <a class="collapse-item" href="{% url 'container-list' %}">Container Report</a>
+              <a class="collapse-item" href="{% url 'delivery-order-list' %}">Delivery Orders/Gate Pass</a>
+
+            </div>
+          </div>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider" />
 
-        <!-- Heading -->
-        <div class="sidebar-heading">Stay Connected</div>
-
-        <!-- Nav Item - FB -->
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            href="https://facebook.com/goandamans"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fas fa-facebook fa-lg"></i>
-            <span>Facebook</span>
-          </a>
-        </li>
-
-        <!-- Nav Item - Insta -->
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            href="https://instagram.com/goandamans.in"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fa fa-brands fa-instagram"></i>
-            <span>Instagram</span>
-          </a>
-        </li>
+        
 
         <!-- Nav Item - Logout -->
         <li class="nav-item">

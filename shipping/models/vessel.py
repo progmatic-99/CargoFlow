@@ -1,8 +1,9 @@
+# Import required modules
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.urls import reverse
 
-
+# Below are the choices for the vessel type and category in the Vessel Model that follows
 VESSEL_TYPES = [("COASTAL", "COASTAL"), ("FOREIGN", "FOREIGN")]
 CATEGORIES = [
     ("CARGO", "CARGO"),
@@ -14,7 +15,7 @@ CATEGORIES = [
     ("OTHERS", "OTHERS"),
 ]
 
-
+# Vessel model
 class Vessel(models.Model):
     slug = AutoSlugField(populate_from="imo_number", unique=True)
     name = models.CharField(max_length=200)
