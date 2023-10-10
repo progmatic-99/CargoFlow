@@ -27,8 +27,6 @@ class Voyage(models.Model):
     agent_importer = models.CharField(max_length=200, null=True, blank=True)
     cha_boe = models.TextField(null=True, blank=True)
     remarks = models.TextField(blank=True, null=True)
-    vessel_on_port = models.BooleanField(default=True)
-    vessel_on_anchorage = models.BooleanField(default=True)
 
     def __str__(self):
         return f"({self.vessel.name}) : ({self.voyage_number}) - {self.last_port_of_call} -> {self.to_port}"
