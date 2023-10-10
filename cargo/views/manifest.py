@@ -15,9 +15,12 @@ class ManifestPDF(LoginRequiredMixin, ListView):
 
         related_bols = BillOfLading.objects.filter(voyage=voyage).all()
 
+        bol_type = "IMPORT" if related_bols[0].bol_type == "1" else "EXPORT"
+
         ctx = {
             "voyage": voyage,
             "vessel": voyage.vessel,
+            "type": bol_type,
             "related_bols": related_bols,
         }
 

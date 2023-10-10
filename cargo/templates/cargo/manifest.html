@@ -20,36 +20,39 @@
       href="{% static 'shipping/css/sb-admin-2.min.css' %}"
       rel="stylesheet"
     />
-  <title>Job Sheet for {{ vessel.name }}</title>
+  <title>Manifest for {{ voyage }}</title>
 </head>
 <body>
   <div class="wrapper">
     <div class="container-fluid">
-      <div class="row justify-content-center"><h1><strong>Manifest</strong></h1></div>
-      <div class="row justify-content-around m-1 p-1">
+      <div class="row justify-content-center">
+        <h1><strong>ITT SHIPPING (PVT) LIMITED</strong></h1>
       </div>
-      <div class="row justify-content-around m-1 p-1">
+      <div class="row justify-content-center">
+        <div><strong>{{ type }} GENERAL MANIFEST</strong></div>
+      </div>
+      <div class="row m-2 justify-content-center">
+        <div><strong>Manifest of Goods {{ voyage }}</strong></div>
+        <div><strong>Colour {{ vessel.flag }} Sailed from {{ voyage.last_port_of_call }} to {{ voyage.next_port_of_call }} ETA ON {{ voyage.eta }}</strong></div>
       </div>
 
         <table class="table">
           <thead>
           <tr>
-              <th scope="col"><strong>S.no</strong></th>
-              <th scope="col"><strong>BL</strong></th>
-              <th scope="col"><strong>Mark</strong></th>
-              <th scope="col"><strong>No. of Pkg</strong></th>
-              <th scope="col"><strong>Description</strong></th>
-              <th scope="col"><strong>Weight</strong></th>
-              <th scope="col"><strong>Shipper</strong></th>
-              <th scope="col"><strong>Consignee</strong></th>
+            <th scope="col"><strong>BL</strong></th>
+            <th scope="col"><strong>Mark</strong></th>
+            <th scope="col"><strong>No. of Pkg</strong></th>
+            <th scope="col"><strong>Description</strong></th>
+            <th scope="col"><strong>Weight</strong></th>
+            <th scope="col"><strong>Shipper</strong></th>
+            <th scope="col"><strong>Consignee</strong></th>
           </tr>
           </thead>
           <tbody id="service-table-body">
               {% for c in related_bols %}
               <tr>
-                  <td>{{ c.id }}</td>
                   <th scope="row">
-                      <span>{{c.bol_number}}</span>
+                    <span>{{c.bol_number}}</span>
                   </th>
                   <td>{{c.mark}}</td>
                   <td>{{c.no_of_pkg}} Pkgs</td>
@@ -61,7 +64,7 @@
               {% endfor %}
           </tbody>
         </table>
-      </div>
+    </div>
   </div>
   
 </body>

@@ -27,7 +27,7 @@ class Voyage(models.Model):
     remarks = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"({self.vessel.name}) : ({self.voyage_number}) - {self.last_port_of_call} -> {self.to_port}"
+        return f"{self.vessel.name} Voy - {self.voyage_number}: FROM {self.last_port_of_call} TO {self.next_port_of_call}"
 
     def get_absolute_url(self):
         return reverse("voyage-list")
