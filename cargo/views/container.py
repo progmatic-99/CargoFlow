@@ -90,5 +90,4 @@ class ContainerBulkEdit(LoginRequiredMixin, FormView):
     template_name = "cargo/container_list.html"
 
     def post(self, request):
-        print(request.POST)
         return redirect(reverse_lazy("container-report"))

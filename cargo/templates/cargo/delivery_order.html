@@ -52,6 +52,9 @@
                   <td>{{ c.bol_number }}</td>
                   <th scope="row">
                       <span>{{c.mark}}</span>
+                      {% if c.loose_cargo %}
+                      <span><strong>(loose cargo)</strong></span>
+                      {% endif %}
                   </th>
                   <td>{{c.no_of_pkg}}</td>
                   <td>{{c.description}}</td>
