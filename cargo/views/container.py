@@ -11,7 +11,7 @@ from cargo.forms import ContainerFormSet
 from cargo.models.container_status import ContainerStatus
 
 
-class ContainerList(LoginRequiredMixin, FormView):
+class ContainerReport(LoginRequiredMixin, FormView):
     login_url = "/login/"
     redirect_field_name = "index"
     login_required = True
@@ -77,7 +77,7 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("index")
 
 
-class ContainerReport(LoginRequiredMixin, ListView):
+class ContainerList(LoginRequiredMixin, ListView):
     login_url = "/login/"
     redirect_field_name = "index"
     login_required = True

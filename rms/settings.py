@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "shipping",
     "users",
     "cargo",
-    "other",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
