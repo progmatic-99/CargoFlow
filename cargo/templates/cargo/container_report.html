@@ -1,70 +1,70 @@
 {% extends 'shipping/base.html' %}
+{% load widget_tweaks %}
 {% block content %}
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
-</div>
-
-{% if object_list %}
-<form method="POST" action="{% url 'container-bulk-edit' %}">
+<form method="POST">
     {% csrf_token %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col"><strong>Container No</strong></th>
-                <th scope="col"><strong>Container Status</strong></th>
-                <th scope="col"><strong>Stuffed</strong></th>
-            </tr>
-        </thead>
-        <tbody id="formset">
-            {% for c in object_list %}
-            <tr class="formset-form">
-                <td>{{c.container_number}}</td>
-                <td>{{c.container_status.prev_status}} -> {{c.container_status.curr_status}}</td>
-                <td><input type="checkbox" class="form-control" checked={{c.stuffed}} ></input></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <div class="mt-5 row justify-content-around">
-        <div class="form-group col-md-4 col-md-offset-5 align-center">
-            <a href="{% url 'container-bulk-edit' %}">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok"></span> Save
-                </button>
-            </a>
-            <a href="{% url 'index' %}">
-                <button type="button" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span> Cancel
-                </button>
-            </a>
-        </div>
+    <div class="form-group row-md-4 row-md-offset-5 align-center" style="margin-top:30px;">
+        <h2><strong>Container Report</strong></h2>
+            {{ form }}
+        <button type="submit" class="btn mt-2 btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Get Containers
+        </button>
     </div>
 </form>
-{% else %}
-    <p>No Entries Detected Yet !</p>
-{% endif %}
 
-
-
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-    
+{% if selected_voyage %}
+<div class="row justify-content-around col-md-offset-5">
+    <div class="col justify-content-around m-1 p-1">
+        <div class="row justify-content-around m-1 p-1">
+            <h6><strong>Total Containers:</strong> {{ total_containers }}</h6>
+            <h6><strong>Voyage No:</strong> {{ selected_voyage.voyage_number }}</h6>
+        </div>
+    </div>
 </div>
 
+<form method="POST" action="{% url 'container-edit' %}">
+    {% csrf_token %}
+{{ formset.management_form }}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"><strong>Container No</strong></th>
+            <th scope="col"><strong>Stuffed</strong></th>
+        </tr>
+    </thead>
+    <tbody id="formset">
+        {% for form in formset %}
+        <tr class="formset-form">
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+        <td>
+            {{ field|add_class:'form-control' }}
+            {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </td>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
+<div class="mt-5 row justify-content-around">
+    <div class="form-group col-md-4 col-md-offset-5 align-center">
+        <a href="{% url 'container-edit' %}">
+            <button type="submit" class="btn btn-success">
+                <span class="glyphicon glyphicon-ok"></span> Save
+            </button>
+        </a>
+        <a href="{% url 'index' %}">
+            <button type="button" class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+        </a>
+    </div>
+</div>
+</form>
+{% endif %}
 {% endblock %}
