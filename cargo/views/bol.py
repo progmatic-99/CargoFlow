@@ -10,7 +10,7 @@ from cargo.forms import (
     BOLCreateForm,
     BOLCreateFormSet,
     BOLConstantForm,
-    BOLListForm,
+    CheckboxForm,
 )
 from shipping.models.voyage import Voyage
 from shipping.forms import VoyageSelectionForm
@@ -90,7 +90,7 @@ class BillOfLadingList(FormView):
         related_bols = BillOfLading.objects.filter(
             voyage=selected_voyage, loose_cargo=False
         )
-        formset = BOLListForm()
+        formset = CheckboxForm()
 
         context = self.get_context_data(
             form=form,
@@ -119,7 +119,7 @@ class BillOfLadingDelete(LoginRequiredMixin, DeleteView):
 
 class BillOfLadingDownload(FormView):
     template_name = "cargo/bol.html"
-    form_class = BOLListForm
+    form_class = CheckboxForm
 
     def post(self, request, slug):
         data = {
@@ -129,6 +129,7 @@ class BillOfLadingDownload(FormView):
         }
 
         voyage = Voyage.objects.filter(slug=slug).first()
+        filename = f"{voyage}-bols.zip"
         bol_data = []
         for bol_number, bol_slug in data.items():
             bol = BillOfLading.objects.filter(
@@ -141,4 +142,4 @@ class BillOfLadingDownload(FormView):
             ctx = {"bol": bol_data[0], "voyage": voyage}
             return create_pdf(f"{bol.bol_number}.pdf", ctx, self.template_name)
 
-        return create_zip(voyage, bol_data, self.template_name)
+        return create_zip(voyage, bol_data, filename, self.template_name)

@@ -14,7 +14,11 @@ from .views.bol import (
 )
 from .views.vendor import VendorCreate, VendorDelete, VendorEdit, VendorList
 from .views.manifest import ManifestPDF
-from .views.delivery_order import DeliveryOrderList, DeliveryOrderPdf
+from .views.delivery_order import (
+    DeliveryOrderList,
+    DeliveryOrderPdf,
+    DeliveryOrderDownload,
+)
 
 
 urlpatterns = [
@@ -51,6 +55,11 @@ urlpatterns = [
         "do/pdf/<str:consignee>",
         DeliveryOrderPdf.as_view(),
         name="delivery-order-pdf",
+    ),
+    path(
+        "do/download",
+        DeliveryOrderDownload.as_view(),
+        name="delivery-order-zip",
     ),
     path(
         "bol/download/<slug:slug>", BillOfLadingDownload.as_view(), name="download-bol"

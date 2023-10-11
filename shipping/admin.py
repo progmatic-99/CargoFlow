@@ -6,7 +6,3 @@ admin.site.register(Voyage)
 admin.site.register(Service)
 admin.site.register(ServiceType)
 admin.site.register(SOF)
-
-
-
-

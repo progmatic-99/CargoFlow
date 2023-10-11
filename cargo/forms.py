@@ -35,7 +35,7 @@ class BOLForm(forms.ModelForm):
         exclude = ["voyage", "bol_type"]
 
 
-class BOLListForm(forms.Form):
+class CheckboxForm(forms.Form):
     select = forms.BooleanField()
 
 
@@ -43,11 +43,6 @@ class BOLCreateForm(BOLForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True
-
-        # Remove labels from the fields
-        for field_name, field in self.fields.items():
-            field.label = ""
-            field.widget.attrs["class"] = "form-control"
 
 
 BOLCreateFormSet = forms.modelformset_factory(

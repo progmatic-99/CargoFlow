@@ -27,16 +27,20 @@
     <div class="container-fluid">
       <div class="row justify-content-center"><h1><strong>Delivery Order</strong></h1></div>
       <div class="row justify-content-around m-1 p-1">
-        <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
-      </div>
-      <div class="row justify-content-around m-1 p-1">
-        <h6><strong>Consignee: </strong> {{ consignee }}</h6>
+        <div class="col">
+          <h6><strong>Voyage No:</strong> {{ voyage.voyage_number }}</h6>
+          <h6><strong>Agent: </strong> {{ voyage.agent_importer }}</h6>
+        </div>
+        <div class="col">
+          <h6><strong>Consignee: </strong> {{ consignee }}</h6>
+          <h6><strong>ETA: </strong> {{ voyage.eta }}</h6>
+        </div>
       </div>
 
         <table class="table">
           <thead>
           <tr>
-              <th scope="col"><strong>S.no</strong></th>
+              <th scope="col"><strong>BL</strong></th>
               <th scope="col"><strong>Mark / Container No.</strong></th>
               <th scope="col"><strong>Number of Pkgs.</strong></th>
               <th scope="col"><strong>Description of Cargo</strong></th>
@@ -45,7 +49,7 @@
           <tbody id="service-table-body">
               {% for c in bols %}
               <tr>
-                  <td>{{ c.id }}</td>
+                  <td>{{ c.bol_number }}</td>
                   <th scope="row">
                       <span>{{c.mark}}</span>
                   </th>
