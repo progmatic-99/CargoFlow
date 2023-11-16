@@ -3,7 +3,6 @@
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Container List</h1>
-    <h1 class="h3 mb-0 text-gray-800">Total: {{containers.count}}</h1>
 </div>
 
 <form method="post" class="mt-4">
@@ -14,28 +13,24 @@
         <tr>
             <th><strong>Stuffed</strong></th>
             <th><strong>Container No</strong></th>
-            <th><strong>Status History</strong></th>
         </tr>
         </thead>
         <tbody id="formset">
-        {% for c in containers %}
-        <tr class="formset-form">
-            <td>
-                <input class="form-control" type="checkbox" name="{{c.container_number}}" {% if c.stuffed %} checked {% endif %} />
-                <input type="hidden" name="{{c.container_number}}" value="False" />
-            </td>
-            <td>{{c.container_number}}</td>
-            <td>
-            {% for status in c.status.all %}
-                {% if status.status == False %}
-                    <span>DeStuffed ({{status.timestamp}}) -> </span>
-                    {% elif status.status == True %}
-                    <span>Stuffed ({{status.timestamp}}) -> </span>
-                {% endif %}
+            {% for form in formset %}
+            <tr class="formset-form">
+            {% for hidden in form.hidden_fields %}
+            {{ hidden }}
             {% endfor %}
+            {% for field in form.visible_fields %}
+            <td>
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+                {% endfor %}
             </td>
-        </tr>
-        {% endfor %}
+            {% endfor %}
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 

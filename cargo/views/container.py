@@ -38,8 +38,8 @@ class ContainerList(LoginRequiredMixin, FormView):
     template_name = "cargo/container_list.html"
 
     def get_context_data(self, **kwargs):
-        containers = Container.objects.all()
-        ctx = {"containers": containers}
+        formset = ContainerFormSet(queryset=Container.objects.all())
+        ctx = {"formset": formset}
 
         return ctx
 
@@ -50,7 +50,6 @@ class ContainerList(LoginRequiredMixin, FormView):
         if formset.is_valid():
             for form in formset:
                 if form.is_valid():
-                    print(form)
                     if "stuffed" in form.changed_data:
                         status = bool(form.cleaned_data["stuffed"])
                         container_number = form.cleaned_data["container_number"]
@@ -62,6 +61,8 @@ class ContainerList(LoginRequiredMixin, FormView):
                             status=status,
                         )
                     form.save()
+        else:
+            self.render_to_response(formset)
 
         return redirect(reverse_lazy("container-list"))
 
