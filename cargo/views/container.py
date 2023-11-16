@@ -1,8 +1,8 @@
 from django.views.generic.edit import DeleteView, FormView
+from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.forms import inlineformset_factory
 
 from cargo.models.container import Container
 from shipping.forms import VoyageSelectionForm
@@ -74,3 +74,14 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     template_name = "shipping/container_delete.html"
     success_url = reverse_lazy("index")
+
+
+class ContainerStatusList(LoginRequiredMixin, ListView):
+    template_name = "cargo/container_status.html"
+    model = Container
+
+    def get_context_data(self, **kwargs):
+        containers = Container.objects.all()
+        ctx = {"containers": containers}
+
+        return ctx

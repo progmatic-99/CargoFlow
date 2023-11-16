@@ -1,8 +1,5 @@
 from django.urls import path
-from .views.container import (
-    ContainerList,
-    ContainerReport,
-)
+from .views.container import ContainerList, ContainerReport, ContainerStatusList
 from .views.bol import (
     BillOfLadingCreate,
     BillOfLadingList,
@@ -23,6 +20,7 @@ urlpatterns = [
     # container views
     path("container/list", ContainerList.as_view(), name="container-list"),
     path("container/report", ContainerReport.as_view(), name="container-report"),
+    path("container/status", ContainerStatusList.as_view(), name="container-status"),
     # bol views
     path("bol/create", BillOfLadingCreate.as_view(), name="bol-create"),
     path("bol/list", BillOfLadingList.as_view(), name="bol-list"),
