@@ -1,8 +1,8 @@
 from django.views.generic.edit import DeleteView, FormView
-from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.forms import inlineformset_factory
 
 from cargo.models.container import Container
 from shipping.forms import VoyageSelectionForm
@@ -23,29 +23,34 @@ class ContainerReport(LoginRequiredMixin, FormView):
             voyage_number=form.cleaned_data["voyages"]
         ).first()
         related_containers = Container.objects.filter(voyage=selected_voyage).all()
-        formset = ContainerFormSet(queryset=related_containers)
 
         context = self.get_context_data(
             form=form,
             total_containers=related_containers.count(),
             selected_voyage=selected_voyage,
-            formset=formset,
+            containers=related_containers,
         )
 
         return self.render_to_response(context)
 
 
-class ContainerEdit(LoginRequiredMixin, FormView):
-    login_url = "/login/"
-    redirect_field_name = "index"
-    template_name = "cargo/container_report.html"
+class ContainerList(LoginRequiredMixin, FormView):
+    template_name = "cargo/container_list.html"
 
-    def post(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        containers = Container.objects.all()
+        ctx = {"containers": containers}
+
+        return ctx
+
+    def post(self, request):
+        print(f"Request: {request.POST}")
         formset = ContainerFormSet(data=request.POST)
 
         if formset.is_valid():
             for form in formset:
                 if form.is_valid():
+                    print(form)
                     if "stuffed" in form.changed_data:
                         status = bool(form.cleaned_data["stuffed"])
                         container_number = form.cleaned_data["container_number"]
@@ -57,11 +62,6 @@ class ContainerEdit(LoginRequiredMixin, FormView):
                             status=status,
                         )
                     form.save()
-        else:
-            ctx = {}
-            ctx["form"] = VoyageSelectionForm()
-            ctx["formset"] = formset
-            return self.render_to_response(ctx)
 
         return redirect(reverse_lazy("container-list"))
 
@@ -73,21 +73,3 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     template_name = "shipping/container_delete.html"
     success_url = reverse_lazy("index")
-
-
-class ContainerList(LoginRequiredMixin, ListView):
-    login_url = "/login/"
-    redirect_field_name = "index"
-    login_required = True
-    model = Container
-    template_name = "cargo/container_list.html"
-    paginate_by = 10
-
-
-class ContainerBulkEdit(LoginRequiredMixin, FormView):
-    login_url = "/login/"
-    redirect_field_name = "index"
-    template_name = "cargo/container_list.html"
-
-    def post(self, request):
-        return redirect(reverse_lazy("container-report"))

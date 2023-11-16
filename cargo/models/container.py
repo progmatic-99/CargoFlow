@@ -8,7 +8,7 @@ from shipping.models.voyage import Voyage
 class Container(models.Model):
     slug = AutoSlugField(populate_from="container_number", unique=True)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
-    container_number = models.CharField(max_length=20)
+    container_number = models.CharField(max_length=40)
     stuffed = models.BooleanField(default=True)
 
     def __str__(self):

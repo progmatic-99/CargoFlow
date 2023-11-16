@@ -1,58 +1,57 @@
 {% extends 'shipping/base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
+    <h1 class="h3 mb-0 text-gray-800">Container List</h1>
+    <h1 class="h3 mb-0 text-gray-800">Total: {{containers.count}}</h1>
 </div>
 
-{% if object_list %}
-<form method="POST" action="{% url 'container-bulk-edit' %}">
+<form method="post" class="mt-4">
     {% csrf_token %}
+    {{ formset.management_form }}
     <table class="table">
         <thead>
-            <tr>
-                <th scope="col"><strong>Container No</strong></th>
-                <th scope="col"><strong>Container Status</strong></th>
-                <th scope="col"><strong>Stuffed</strong></th>
-            </tr>
+        <tr>
+            <th><strong>Stuffed</strong></th>
+            <th><strong>Container No</strong></th>
+            <th><strong>Status History</strong></th>
+        </tr>
         </thead>
         <tbody id="formset">
-            {% for c in object_list %}
-            <tr class="formset-form">
-                <td>{{c.container_number}}</td>
-                <td>
-                    {% for status in c.status.all %}
-                        {% if status.status == False %}
-                        <span>DeStuffed ({{status.timestamp}}) -> </span>
-                        {% elif status.status == True %}
-                        <span>Stuffed ({{status.timestamp}}) -> </span>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-                <td><input type="checkbox" class="form-control" checked={{c.stuffed}} ></input></td>
-            </tr>
+        {% for c in containers %}
+        <tr class="formset-form">
+            <td>
+                <input class="form-control" type="checkbox" name="{{c.container_number}}" {% if c.stuffed %} checked {% endif %} />
+                <input type="hidden" name="{{c.container_number}}" value="False" />
+            </td>
+            <td>{{c.container_number}}</td>
+            <td>
+            {% for status in c.status.all %}
+                {% if status.status == False %}
+                    <span>DeStuffed ({{status.timestamp}}) -> </span>
+                    {% elif status.status == True %}
+                    <span>Stuffed ({{status.timestamp}}) -> </span>
+                {% endif %}
             {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
-    
+
     <div class="mt-5 row justify-content-around">
         <div class="form-group col-md-4 col-md-offset-5 align-center">
-            <a href="{% url 'container-bulk-edit' %}">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok"></span> Save
-                </button>
-            </a>
-            <a href="{% url 'index' %}">
-                <button type="button" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span> Cancel
-                </button>
-            </a>
-        </div>
+        <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Save
+        </button>
+        <a href="{% url 'index' %}">
+            <button type="button" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+        </a>
+    </div>
     </div>
 </form>
-{% else %}
-    <p>No Entries Detected Yet !</p>
-{% endif %}
-
 
 
 <div class="pagination">

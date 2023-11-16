@@ -22,9 +22,6 @@
     </div>
 </div>
 
-<form method="POST" action="{% url 'container-edit' %}">
-    {% csrf_token %}
-{{ formset.management_form }}
 <table class="table">
     <thead>
         <tr>
@@ -33,38 +30,15 @@
         </tr>
     </thead>
     <tbody id="formset">
-        {% for form in formset %}
+        {% for c in containers %}
         <tr class="formset-form">
-        {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-        {% endfor %}
-        {% for field in form.visible_fields %}
+        <td>{{c.container_number}}</td>
         <td>
-            {{ field|add_class:'form-control' }}
-            {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+            <input class="form-control" type="checkbox" {% if c.stuffed %}checked{% endif %} disabled>
         </td>
-        {% endfor %}
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<div class="mt-5 row justify-content-around">
-    <div class="form-group col-md-4 col-md-offset-5 align-center">
-        <a href="{% url 'container-edit' %}">
-            <button type="submit" class="btn btn-success">
-                <span class="glyphicon glyphicon-ok"></span> Save
-            </button>
-        </a>
-        <a href="{% url 'index' %}">
-            <button type="button" class="btn btn-danger">
-                <span class="glyphicon glyphicon-remove"></span> Cancel
-            </button>
-        </a>
-    </div>
-</div>
-</form>
 {% endif %}
 {% endblock %}

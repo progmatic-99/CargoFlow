@@ -1,9 +1,7 @@
 from django.urls import path
 from .views.container import (
     ContainerList,
-    ContainerEdit,
     ContainerReport,
-    ContainerBulkEdit,
 )
 from .views.bol import (
     BillOfLadingCreate,
@@ -24,11 +22,7 @@ from .views.delivery_order import (
 urlpatterns = [
     # container views
     path("container/list", ContainerList.as_view(), name="container-list"),
-    path("container/edit", ContainerEdit.as_view(), name="container-edit"),
     path("container/report", ContainerReport.as_view(), name="container-report"),
-    path(
-        "container/bulk/edit", ContainerBulkEdit.as_view(), name="container-bulk-edit"
-    ),
     # bol views
     path("bol/create", BillOfLadingCreate.as_view(), name="bol-create"),
     path("bol/list", BillOfLadingList.as_view(), name="bol-list"),
