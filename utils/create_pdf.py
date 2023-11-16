@@ -14,14 +14,7 @@ def create_pdf(filename: str, ctx, template: str):
 
     html_content = render_to_string(template, ctx).encode("utf-8")
 
-    weasyprint.HTML(string=html_content).write_pdf(
-        response,
-        stylesheets=[
-            weasyprint.CSS(
-                f"{BASE_DIR}/shipping/static/shipping/css/sb-admin-2.min.css"
-            )
-        ],
-    )
+    weasyprint.HTML(string=html_content).write_pdf(response)
 
     return response
 
@@ -35,14 +28,7 @@ def create_zip(voyage, bol_data, zip_filename, template: str):
         filenames.append(path)
 
         html_content = render_to_string(template, ctx).encode("utf-8")
-        weasyprint.HTML(string=html_content).write_pdf(
-            target=path,
-            stylesheets=[
-                weasyprint.CSS(
-                    f"{BASE_DIR}/shipping/static/shipping/css/sb-admin-2.min.css"
-                )
-            ],
-        )
+        weasyprint.HTML(string=html_content).write_pdf(target=path)
 
     zip_buffer = BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
@@ -64,14 +50,7 @@ def create_do_zip(voyage, bol_data, zip_filename, template: str):
         filenames.append(path)
 
         html_content = render_to_string(template, ctx).encode("utf-8")
-        weasyprint.HTML(string=html_content).write_pdf(
-            target=path,
-            stylesheets=[
-                weasyprint.CSS(
-                    f"{BASE_DIR}/shipping/static/shipping/css/sb-admin-2.min.css"
-                )
-            ],
-        )
+        weasyprint.HTML(string=html_content).write_pdf(target=path)
 
     zip_buffer = BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
