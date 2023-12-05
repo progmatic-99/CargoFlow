@@ -5,51 +5,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link
-      href="{% static 'shipping/vendor/fontawesome-free/css/all.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-      rel="stylesheet"
-    />
-
-    <!-- Custom styles for this template-->
-    <link
-      href="{% static 'shipping/css/sb-admin-2.min.css' %}"
-      rel="stylesheet"
-    />
-  <title>Job Sheet for {{ vessel.name }}</title>
+  <style>
+    #wrapper {
+      display: flex;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -0.75rem;
+      margin-left: -0.75rem;
+    }
+    .m-2 {
+      margin: 0.5rem !important;
+    }
+    .p-1 {
+      padding: 0.25rem !important;
+    }
+    .container-fluid {
+      width: 100%;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-family: Arial, sans-serif;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    /* Table row styles */
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    /* Table cell styles */
+    td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    .justify-content-center {
+      justify-content: center !important;
+    }
+    .justify-content-around {
+      justify-content: space-around !important;
+    }
+  </style>
+  <title>Manifest for {{ voyage }}</title>
 </head>
 <body>
-  <div class="wrapper">
+  <div id="wrapper">
     <div class="container-fluid">
-      <div class="row justify-content-center"><h1><strong>Manifest</strong></h1></div>
-      <div class="row justify-content-around m-1 p-1">
+      <div class="row justify-content-around">
+        <h1><strong>ITT SHIPPING (PVT) LIMITED</strong></h1>
       </div>
-      <div class="row justify-content-around m-1 p-1">
+      <div class="row justify-content-around">
+        <div><strong>{{ type }} GENERAL MANIFEST</strong></div>
+      </div>
+      <div class="row m-2 justify-content-around">
+        <div><strong>Manifest of Goods {{ voyage }}</strong></div>
+        <div><strong>Colour {{ vessel.flag }} Sailed from {{ voyage.last_port_of_call }} to {{ voyage.next_port_of_call }} ETA ON {{ voyage.eta }}</strong></div>
       </div>
 
         <table class="table">
           <thead>
           <tr>
-              <th scope="col"><strong>S.no</strong></th>
-              <th scope="col"><strong>BL</strong></th>
-              <th scope="col"><strong>Mark</strong></th>
-              <th scope="col"><strong>No. of Pkg</strong></th>
-              <th scope="col"><strong>Description</strong></th>
-              <th scope="col"><strong>Weight</strong></th>
-              <th scope="col"><strong>Shipper</strong></th>
-              <th scope="col"><strong>Consignee</strong></th>
+            <th scope="col"><strong>BL</strong></th>
+            <th scope="col"><strong>Mark</strong></th>
+            <th scope="col"><strong>No. of Pkg</strong></th>
+            <th scope="col"><strong>Description</strong></th>
+            <th scope="col"><strong>Weight</strong></th>
+            <th scope="col"><strong>Shipper</strong></th>
+            <th scope="col"><strong>Consignee</strong></th>
           </tr>
           </thead>
           <tbody id="service-table-body">
               {% for c in related_bols %}
               <tr>
-                  <td>{{ c.id }}</td>
                   <th scope="row">
-                      <span>{{c.bol_number}}</span>
+                    <span>{{c.bol_number}}</span>
                   </th>
                   <td>{{c.mark}}</td>
                   <td>{{c.no_of_pkg}} Pkgs</td>
@@ -61,7 +104,7 @@
               {% endfor %}
           </tbody>
         </table>
-      </div>
+    </div>
   </div>
   
 </body>

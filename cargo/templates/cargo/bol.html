@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load widget_tweaks %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+#wrapper {
+  display: flex;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -0.75rem;
+  margin-left: -0.75rem;
+}
+.m-1 {
+  margin: 0.25rem !important;
+}
+.p-1 {
+  padding: 0.25rem !important;
+}
+.container-fluid {
+  width: 100%;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+}
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+/* Table row styles */
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+tr:hover {
+  background-color: #f5f5f5;
+}
+/* Table cell styles */
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+.justify-content-center {
+  justify-content: center !important;
+}
+.justify-content-around {
+  justify-content: space-around !important;
+}
+  </style>
+  <title>Bill of Lading for {{ voyage }}</title>
+</head>
+<body>
+  <div id="wrapper">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <h3>Bill of Lading for {{ voyage }}</h3>
+      </div>
+      <div class="row justify-content-around m-1 p-1">
+        <h5>ETA:</h5> <h6>{{ voyage.eta }}</h6>
+        <h5>ETB:</h5> <h6>{{ voyage.etb }}</h6>
+        <h5>ETD:</h5> <h6>{{ voyage.etd }}</h6>
+      </div>
+      <div class="row justify-content-around m-1 p-1">
+        <h5>Vessel Name:</h5> <h6>{{ voyage.vessel.name }}</h6>
+        <h5>Voyage No:</h5> <h6>{{ voyage.voyage_number }}</h6>
+        <h5>Master:</h5> <h6>{{ voyage.master_name }}</h6>
+        <h5>Next Port of Call:</h5> <h6>{{ voyage.next_port_of_call }}</h6>
+        <h5>Last Port of Call:</h5> <h6>{{ voyage.last_port_of_call }}</h6>
+      </div>
+
+        <table class="table">
+          <thead>
+          <tr>
+              <th scope="col"><strong>BL</strong></th>
+              <th scope="col"><strong>Mark</strong></th>
+              <th scope="col"><strong>No. of Pkg</strong></th>
+              <th scope="col"><strong>Description</strong></th>
+              <th scope="col"><strong>Weight</strong></th>
+              <th scope="col"><strong>Shipper</strong></th>
+              <th scope="col"><strong>Consignee</strong></th>
+          </tr>
+          </thead>
+          <tbody id="service-table-body">
+              {% for c in bol %}
+              <tr>
+                  <th scope="row">
+                      <span>{{c.bol_number}}</span>
+                  </th>
+                  <td>{{c.mark}}</td>
+                  <td>{{c.no_of_pkg}} Pkgs</td>
+                  <td>{{c.description}}</td>
+                  <td>{{c.weight}} Kgs</td>
+                  <td>{{c.shipper}}</td>
+                  <td>{{c.consignee}}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+  
+</body>
+</html>

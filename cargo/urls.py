@@ -1,30 +1,26 @@
 from django.urls import path
-from .views.container import (
-    ContainerCreate,
-    ContainerDelete,
-    ContainerEdit,
-    ContainerList,
-)
+from .views.container import ContainerList, ContainerReport, ContainerStatusList
 from .views.bol import (
     BillOfLadingCreate,
     BillOfLadingList,
     BillOfLadingEdit,
     BillOfLadingDelete,
+    BillOfLadingDownload,
 )
 from .views.vendor import VendorCreate, VendorDelete, VendorEdit, VendorList
 from .views.manifest import ManifestPDF
+from .views.delivery_order import (
+    DeliveryOrderList,
+    DeliveryOrderPdf,
+    DeliveryOrderDownload,
+)
 
 
 urlpatterns = [
     # container views
-    path("container/create", ContainerCreate.as_view(), name="container-create"),
     path("container/list", ContainerList.as_view(), name="container-list"),
-    path("container/edit/<slug:slug>", ContainerEdit.as_view(), name="container-edit"),
-    path(
-        "container/delete/<slug:slug>",
-        ContainerDelete.as_view(),
-        name="container-delete",
-    ),
+    path("container/report", ContainerReport.as_view(), name="container-report"),
+    path("container/status", ContainerStatusList.as_view(), name="container-status"),
     # bol views
     path("bol/create", BillOfLadingCreate.as_view(), name="bol-create"),
     path("bol/list", BillOfLadingList.as_view(), name="bol-list"),
@@ -45,4 +41,19 @@ urlpatterns = [
     ),
     # manifest pdf
     path("manifest/get/<slug:slug>", ManifestPDF.as_view(), name="get-manifest"),
+    # delivery order
+    path("do/list", DeliveryOrderList.as_view(), name="delivery-order-list"),
+    path(
+        "do/pdf/<str:consignee>",
+        DeliveryOrderPdf.as_view(),
+        name="delivery-order-pdf",
+    ),
+    path(
+        "do/download",
+        DeliveryOrderDownload.as_view(),
+        name="delivery-order-zip",
+    ),
+    path(
+        "bol/download/<slug:slug>", BillOfLadingDownload.as_view(), name="download-bol"
+    ),
 ]

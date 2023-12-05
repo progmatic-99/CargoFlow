@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     ".ngrok-free.app",
 ]
 
-ngrok_url = "https://6964-122-162-147-191.ngrok-free.app"
+ngrok_url = "https://7b4b-122-162-151-118.ngrok-free.app"
 
 
 AUTH_USER_MODEL = "users.User"
@@ -40,8 +40,8 @@ AUTH_USER_MODEL = "users.User"
 
 INSTALLED_APPS = [
     "shipping",
-    "cargo",
     "users",
+    "cargo",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

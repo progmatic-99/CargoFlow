@@ -1,9 +1,9 @@
-{% extends 'shipping/base.html' %}
+{%extends 'shipping/base.html' %}
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
-    <a href="{% url 'voyage-create' %} ">
-        <button type="button" class="btn btn-primary">Add Voyage</button>
+    <a href="{% url 'vendor-create' %} ">
+        <button type="button" class="btn btn-primary">Add Vendor</button>
     </a>
 </div>
 
@@ -12,26 +12,28 @@
     <thead>
     <tr>
         <th scope="col"><strong>SNo.</strong></th>
-        <th scope="col"><strong>Voyage Number</strong></th>
-        <th scope="col"><strong>Vessel</strong></th>
-        <th scope="col">To Port</th>
-        <th scope="col">ETA</th>
-        <th scope="col">ETB</th>
-        <th scope="col">ETD</th>
+        <th scope="col"><strong>Name</strong></th>
+        <th scope="col"><strong>Contact Person</strong></th>
+        <th scope="col"><strong>Contact No</strong></th>
+        <th scope="col"><strong>Account No</strong></th>
+        <th scope="col">IFSC Code</th>
+        <th scope="col">Address</th>
+        <th scope="col">Remarks</th>
         <th scope="col"><strong>Edit</strong></th>
     </tr>
     </thead>
     <tbody>
     {% for c in object_list %}
         <tr>
-            <th scope="row">{{c.id}}</th>
-            <th scope="row">{{c.voyage_number}}</th>
-            <td>{{c.vessel}}</td>
-            <td>{{c.to_port}}</td>
-            <td>{{c.eta}}</td>
-            <td>{{c.etb}}</td>
-            <td>{{c.etd}}</td>
-            <td><a href="{% url 'voyage-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
+            <td>{{c.id}}</td>
+            <th scope="row">{{c.name}}</th>
+            <td>{{c.contact_person}}</td>
+            <td>{{c.contact_no}}</td>
+            <td>{{c.account_no}}</td>
+            <td>{{c.ifsc_code}}</td>
+            <td>{{c.address}}</td>
+            <td>{{c.remarks}}</td>
+            <td><a href="{% url 'vendor-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -58,7 +60,6 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
-    
 </div>
 
 

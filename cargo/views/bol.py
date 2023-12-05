@@ -4,7 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 
 from cargo.models.bol import BillOfLading
-from cargo.forms import BOLForm, BOLCreateForm, BOLCreateFormSet, BOLConstantForm
+from utils.create_pdf import create_pdf, create_zip
+from cargo.forms import (
+    BOLForm,
+    BOLCreateForm,
+    BOLCreateFormSet,
+    BOLConstantForm,
+    CheckboxForm,
+)
 from shipping.models.voyage import Voyage
 from shipping.forms import VoyageSelectionForm
 
@@ -18,6 +25,7 @@ class BillOfLadingCreate(LoginRequiredMixin, CreateView):
     button_heading = "Add"
     table_headings = [
         "BL",
+        "Loose Cargo",
         "Mark",
         "No of Pkg",
         "Weight",
@@ -79,11 +87,16 @@ class BillOfLadingList(FormView):
         selected_voyage = Voyage.objects.filter(
             voyage_number=form.cleaned_data["voyages"]
         ).first()
-        related_bols = BillOfLading.objects.filter(voyage=selected_voyage)
+        related_bols = BillOfLading.objects.filter(
+            voyage=selected_voyage, loose_cargo=False
+        )
+        formset = CheckboxForm()
+
         context = self.get_context_data(
             form=form,
             selected_voyage=selected_voyage,
             related_bols=related_bols,
+            formset=formset,
         )
         return self.render_to_response(context)
 
@@ -102,3 +115,31 @@ class BillOfLadingDelete(LoginRequiredMixin, DeleteView):
     model = BillOfLading
     template_name = "shipping/bol_delete.html"
     success_url = reverse_lazy("index")
+
+
+class BillOfLadingDownload(FormView):
+    template_name = "cargo/bol.html"
+    form_class = CheckboxForm
+
+    def post(self, request, slug):
+        data = {
+            key: request.POST[key]
+            for key in request.POST.keys()
+            if key not in ["csrfmiddlewaretoken", "all"]
+        }
+
+        voyage = Voyage.objects.filter(slug=slug).first()
+        filename = f"{voyage}-bols.zip"
+        bol_data = []
+        for bol_number, bol_slug in data.items():
+            bol = BillOfLading.objects.filter(
+                voyage=voyage, loose_cargo=False, slug=bol_slug
+            )
+            bol_data.append(bol)
+
+        if len(bol_data) == 1:
+            bol = bol_data[0].first()
+            ctx = {"bol": bol_data[0], "voyage": voyage}
+            return create_pdf(f"{bol.bol_number}.pdf", ctx, self.template_name)
+
+        return create_zip(voyage, bol_data, filename, self.template_name)

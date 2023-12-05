@@ -1,6 +1,6 @@
-from cargo.models.container import Container
 from cargo.models.bol import BillOfLading
 from cargo.models.vendor import Vendor
+from cargo.models.container import Container
 from shipping.forms import VoyageSelectionForm
 
 from django import forms
@@ -9,10 +9,17 @@ from django import forms
 TYPE = [(1, "IMPORT"), (2, "EXPORT")]
 
 
-class ContainerCreateForm(forms.ModelForm):
+class ContainerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["container_number"].disabled = True
+
     class Meta:
         model = Container
-        fields = "__all__"
+        fields = ["container_number", "stuffed"]
+
+
+ContainerFormSet = forms.modelformset_factory(Container, form=ContainerForm, extra=0)
 
 
 class VendorCreateForm(forms.ModelForm):
@@ -28,15 +35,14 @@ class BOLForm(forms.ModelForm):
         exclude = ["voyage", "bol_type"]
 
 
+class CheckboxForm(forms.Form):
+    select = forms.BooleanField()
+
+
 class BOLCreateForm(BOLForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True
-
-        # Remove labels from the fields
-        for field_name, field in self.fields.items():
-            field.label = ""
-            field.widget.attrs["class"] = "form-control"
 
 
 BOLCreateFormSet = forms.modelformset_factory(

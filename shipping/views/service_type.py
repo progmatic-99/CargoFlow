@@ -46,7 +46,6 @@ class ServiceTypeCreate(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         company_name = request.POST.get("company")
         company = Company.objects.filter(name=company_name).first()
-        print(company)
         data = {key: request.POST[key] for key in request.POST if key != "company"}
 
         formset = ServiceTypeCreateFormSet(data=data)
@@ -55,7 +54,6 @@ class ServiceTypeCreate(LoginRequiredMixin, CreateView):
             for form in formset:
                 instance = form.save(commit=False)
                 instance.company = company
-                print(instance)
                 instance.save()
         else:
             return self.render_to_response({"formset": formset})

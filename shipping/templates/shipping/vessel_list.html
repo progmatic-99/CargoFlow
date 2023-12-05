@@ -20,6 +20,8 @@
         <th scope="col">Call Sign</th>
         <th scope="col">Official No</th>
         <th scope="col">Registry Port</th>
+        <th scope="col">GRT</th>
+        <th scope="col">NRT</th>
         <th scope="col"><strong>Edit</strong></th>
     </tr>
     </thead>
@@ -35,6 +37,8 @@
             <td>{{c.call_sign}}</td>
             <td>{{c.official_no}}</td>
             <td>{{c.registry_port}}</td>
+            <td>{{c.grt}}</td>
+            <td>{{c.nrt}}</td>
             <td><a href="{%url 'vessel-edit' c.slug %}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
